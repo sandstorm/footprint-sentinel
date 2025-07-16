@@ -1,0 +1,11 @@
+body {
+    padding: 20px;
+}
+
+img {
+    max-width: 100%;
+    width: 800px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    height: auto;
+}

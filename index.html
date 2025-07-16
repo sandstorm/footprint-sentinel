@@ -2,12 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./demo/main.css">
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div>
+      <img src="./demo/big_photo-1529773464063-f6810c569277.avif">
+    </div>
+    <script type="module">
+      import FootprintSentinel from "./src/main.ts";
+
+      new FootprintSentinel({
+        isActivated: true,
+        showFootprint: true,
+        showResourceHints: true,
+        maxBytesPerResourceThreshold: 150 * 1024,
+        maxBytesPer100x100Threshold: 8 * 1024,
+        onInitialFootprint: footprint => {
+          console.log('onInitialFootprint', footprint)
+        },
+        onFootprintChange: footprint => {
+          console.log('onFootprintChange', footprint)
+        },
+      })
+    </script>
   </body>
 </html>
