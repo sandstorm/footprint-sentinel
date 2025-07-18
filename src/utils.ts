@@ -1,17 +1,16 @@
-export function createShortHashSync(input: String) {
-  let hash = 0
+export function createHash(data: string) {
+  const seeds = [5381, 33, 65599, 131071] // Different prime seeds
+  let result = ''
 
-  for (let i = 0; i < input.length; i++) {
-    const char = input.charCodeAt(i)
-    hash = (hash << 5) - hash + char
-    hash = hash & hash // Convert to 32-bit integer
+  for (const seed of seeds) {
+    let hash = seed
+    for (let i = 0; i < data.length; i++) {
+      hash = (hash << 5) + hash + data.charCodeAt(i)
+    }
+    result += (hash >>> 0).toString(16).padStart(8, '0')
   }
 
-  // Convert to positive hex string
-  const hexHash = Math.abs(hash).toString(16)
-
-  // Pad with zeros if needed and truncate to desired length
-  return hexHash.padStart(8, '0').substring(0, length)
+  return result
 }
 
 export function formatBytes(bytes: number): string {

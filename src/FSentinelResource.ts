@@ -1,4 +1,4 @@
-import { createShortHashSync, formatBytes } from './utils'
+import { createHash, formatBytes } from './utils'
 import type { FSentinelOptions } from './types.ts'
 
 export default class FSentinelResource {
@@ -21,16 +21,12 @@ export default class FSentinelResource {
     return false
   }
 
-  public getHash() {
-    return createShortHashSync(this.url + this.size)
-  }
-
   public renderHint(element: Element) {
     _renderResourceHint(element, this)
   }
 
   static sizeFromResource(resource: PerformanceResourceTiming): number {
-    return resource.transferSize || resource.encodedBodySize || 0
+    return resource.encodedBodySize || 0
   }
 }
 
