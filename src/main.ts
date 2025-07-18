@@ -1,39 +1,38 @@
-import type { FSentinelOptions, FootprintGuardResult } from './types.ts'
-import { defaultOptions } from './FSentinelOptions.ts'
-import FSentinelRessources from './FSentinelResources.ts'
+import type { FSOptions, FSResult } from './types.ts'
 import {
   findElementsWithUrl,
   formatBytes,
   getSizeFactorForBytes,
 } from './utils.ts'
-import { getRatingForBytes } from './FSentinelRating.ts'
-import FSentinelResource from './FSentinelResource.ts'
 import styles from './styles.ts'
-
-const FOOTPRINT_ELEMENT_CLASS_NAME = 'footprint-guard'
+import { fsDefaultOptions } from './FSOptions.ts'
+import type FSResource from './FSResource.ts'
+import FSRessources from './FSResources.ts'
+import { getRatingForBytes } from './FSRating.ts'
+import FSConsts from './FSConsts.ts'
 
 export default class FootprintSentinel extends EventTarget {
   private static instance: FootprintSentinel
   private footprintElement: HTMLDivElement | null = null
-  private fgOptions: FSentinelOptions = defaultOptions
-  private fgResources: FSentinelRessources = FSentinelRessources.later()
+  private fgOptions: FSOptions = fsDefaultOptions
+  private fgResources: FSRessources = FSRessources.later()
   private lastTotalBytes = 0
   private lastTotalBytesDebounceTimeout: number | null = null
 
-  constructor(options: Partial<FSentinelOptions>) {
+  constructor(options: Partial<FSOptions>) {
     super()
     if (FootprintSentinel.instance) {
       // ensure singleton instance
       return FootprintSentinel.instance
     }
     this.fgOptions = {
-      ...defaultOptions,
+      ...fsDefaultOptions,
       ...options,
     }
 
     if (this.fgOptions.isActivated) {
-      this.fgResources = new FSentinelRessources({
-        fgOptions: this.fgOptions,
+      this.fgResources = new FSRessources({
+        fsOptions: this.fgOptions,
         onResourceUpdated: this.handleResourceUpdated.bind(this),
         onInitialFootprint: this.handleInitialFootprint.bind(this),
       })
@@ -49,7 +48,7 @@ export default class FootprintSentinel extends EventTarget {
     FootprintSentinel.instance = this
   }
 
-  public get footprint(): FootprintGuardResult {
+  public get footprint(): FSResult {
     const totalBytes = this.fgResources.totalBytes()
     const deltaBytes = totalBytes - this.lastTotalBytes
     return {
@@ -62,7 +61,7 @@ export default class FootprintSentinel extends EventTarget {
     }
   }
 
-  private handleResourceUpdated(resource: FSentinelResource) {
+  private handleResourceUpdated(resource: FSResource) {
     if (this.lastTotalBytesDebounceTimeout) {
       clearTimeout(this.lastTotalBytesDebounceTimeout)
     }
@@ -120,31 +119,31 @@ export default class FootprintSentinel extends EventTarget {
 
     this.footprintElement.innerHTML = `
 
-        <div class="footprint-guard__stats" data-rating="${totalBytesRating}" style="${totalBytesStyle}">
-            <div class="footprint-guard__row">
-                <span class="footprint-guard__rating">${totalBytesRating}</span>
+        <div class="${FSConsts.cssClass.sentinelStats}" data-rating="${totalBytesRating}" style="${totalBytesStyle}">
+            <div class="${FSConsts.cssClass.sentinelRow}">
+                <span class="${FSConsts.cssClass.sentinelRating}">${totalBytesRating}</span>
                 <span style="width: 10px;"></span>
-                <span class="footprint-guard__size"><strong>${totalBytesFormatted}</strong></span>
+                <span class="${FSConsts.cssClass.sentinelSize}"><strong>${totalBytesFormatted}</strong></span>
             </div>
-            <div class="footprint-guard__label">
+            <div class="${FSConsts.cssClass.sentinelLabel}">
                 ${!showInitialLoad ? initialLabel : totalBytesLabel}
             </div>
         </div>
 
-        <div class="footprint-guard__stats ${!showInitialLoad ? 'footprint-guard__stats--hide' : ''}" data-rating="${initialRating}" style="${initialStyle}">
-            <div class="footprint-guard__row">
-                <span class="footprint-guard__rating">${initialRating}</span>
+        <div class="${FSConsts.cssClass.sentinelStats} ${!showInitialLoad ? FSConsts.cssClass.sentinelStatsHide : ''}" data-rating="${initialRating}" style="${initialStyle}">
+            <div class="${FSConsts.cssClass.sentinelRow}">
+                <span class="${FSConsts.cssClass.sentinelRating}">${initialRating}</span>
                 <span style="width: 10px;"></span>
-                <span class="footprint-guard__size">${initialBytesFormatted}</span>
+                <span class="${FSConsts.cssClass.sentinelSize}">${initialBytesFormatted}</span>
             </div>
-            <div class="footprint-guard__label">
+            <div class="${FSConsts.cssClass.sentinelLabel}">
                 ${initialLabel}
             </div>
         </div>
     `
   }
 
-  private updateResourceHint(resource: FSentinelResource) {
+  private updateResourceHint(resource: FSResource) {
     if (!this.fgOptions?.showResourceHints) return
 
     if (resource.size < this.fgOptions.ignoreResourcesBelowBytesThreshold) {
@@ -157,7 +156,7 @@ export default class FootprintSentinel extends EventTarget {
   }
 
   private addFootprintElement() {
-    if (document.querySelector(FOOTPRINT_ELEMENT_CLASS_NAME)) {
+    if (document.querySelector(FSConsts.cssClass.sentinel)) {
       console.warn(
         'FootprintGuard element already exists, skipping initialization.'
       )
@@ -166,8 +165,8 @@ export default class FootprintSentinel extends EventTarget {
 
     document.body.insertAdjacentHTML('beforeend', styles)
     const element = document.createElement('div')
-    element.className = FOOTPRINT_ELEMENT_CLASS_NAME
-    element.style.zIndex = this.fgOptions.guardZIndex.toString()
+    element.className = FSConsts.cssClass.sentinel
+    element.style.zIndex = this.fgOptions.fsZIndex.toString()
     document.body.appendChild(element)
 
     return element

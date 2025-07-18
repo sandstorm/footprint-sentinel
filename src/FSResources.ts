@@ -1,32 +1,32 @@
-import FSentinelResource from './FSentinelResource.ts'
-import { defaultOptions } from './FSentinelOptions.ts'
-import type { FSentinelResourcesOptions, FSentinelOptions } from './types.ts'
+import type { FSResourcesOptions, FSOptions } from './types.ts'
+import FSResource from './FSResource.ts'
+import { fsDefaultOptions } from './FSOptions.ts'
 
 const UPDATE_INTERVAL_BEFORE_INITIAL_MS = 200
 const UPDATE_INTERVAL_AFTER_INITIAL_MS = 2000
 
-export default class FSentinelRessources {
-  public resources: { [url: string]: FSentinelResource } = {}
-  public fqOptions: FSentinelOptions
+export default class FSRessources {
+  public resources: { [url: string]: FSResource } = {}
+  public fqOptions: FSOptions
   public initialBytes: number | null = null
 
-  public onResourceUpdated: (resource: FSentinelResource) => void = () => {}
+  public onResourceUpdated: (resource: FSResource) => void = () => {}
   public onInitialFootprint: () => void = () => {}
 
   private updateTimeout: number | null = null
   private currentUpdateInterval: number = UPDATE_INTERVAL_BEFORE_INITIAL_MS
   private documentLoadedTimestampMs: number | null = null
 
-  public static later(): FSentinelRessources {
-    return new FSentinelRessources({
-      fgOptions: defaultOptions,
+  public static later(): FSRessources {
+    return new FSRessources({
+      fsOptions: fsDefaultOptions,
       onResourceUpdated: () => null,
       onInitialFootprint: () => null,
     })
   }
 
-  constructor(options: FSentinelResourcesOptions) {
-    this.fqOptions = options.fgOptions
+  constructor(options: FSResourcesOptions) {
+    this.fqOptions = options.fsOptions
     this.onResourceUpdated = options.onResourceUpdated
     this.onInitialFootprint = options.onInitialFootprint
   }
@@ -47,17 +47,14 @@ export default class FSentinelRessources {
     })
   }
 
-  public addResource(resource: PerformanceResourceTiming): FSentinelRessources {
+  public addResource(resource: PerformanceResourceTiming): FSRessources {
     if (this.resources[resource.name]) {
       const updated = this.resources[resource.name].updateIfNeeded(resource)
       if (updated) {
         this.onResourceUpdated(this.resources[resource.name])
       }
     } else {
-      this.resources[resource.name] = new FSentinelResource(
-        resource,
-        this.fqOptions
-      )
+      this.resources[resource.name] = new FSResource(resource, this.fqOptions)
       this.onResourceUpdated(this.resources[resource.name])
     }
     return this
@@ -69,7 +66,7 @@ export default class FSentinelRessources {
     }, 0)
   }
 
-  public forEach(callback: (resource: FSentinelResource) => void): void {
+  public forEach(callback: (resource: FSResource) => void): void {
     Object.values(this.resources).forEach(callback)
   }
 
@@ -103,7 +100,7 @@ export default class FSentinelRessources {
     }
   }
 
-  private updateWithCurrentPerformanceEntries(): FSentinelRessources {
+  private updateWithCurrentPerformanceEntries(): FSRessources {
     const entries = [
       ...performance.getEntriesByType('resource'),
       performance.getEntriesByType('navigation')[0],

@@ -1,3 +1,8 @@
+import FSConsts from './FSConsts.ts'
+
+const classes = FSConsts.cssClass
+const vars = FSConsts.cssVar
+
 const styles = `
     <style>
         .test {
@@ -5,13 +10,13 @@ const styles = `
             pointer-events: none;
         }
         
-        .dirty {
-          filter: var(--dirty-filter);
+        .${classes.resourceDirty} {
+          filter: var(${vars.resourceDirtyFilter});
         }
         
       
 
-        .footprint-guard {
+        .${classes.sentinel} {
             display: flex;
             flex-direction: column;
             align-items: end;
@@ -21,7 +26,7 @@ const styles = `
             font-size: 18px;
         }
 
-        .footprint-guard__stats {
+        .${classes.sentinelStats} {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -32,125 +37,52 @@ const styles = `
             max-width: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
+        
+        .${classes.sentinelStatsHide} {
+            display: none;
+        }
 
-        .footprint-guard__row {
+        .${classes.sentinelRow} {
             display: flex;
             flex-direction: row;
         }
 
-        .footprint-guard__label {
+        .${classes.sentinelLabel} {
             display: flex;
             align-items: center;
             font-size: 14px;
             line-height: 1.2;
         }
 
-        .footprint-guard__stats--hide {
-            display: none;
-        }
-
-        .footprint-guard__stats[data-rating="A+"] {
+        .${classes.sentinelStats}[data-rating="A+"] {
            background: #00febc;
         }
 
-        .footprint-guard__stats[data-rating="A"] {
+        .${classes.sentinelStats}[data-rating="A"] {
            background: #1aff93;
         }
 
-        .footprint-guard__stats[data-rating="B"] {
+        .${classes.sentinelStats}[data-rating="B"] {
            background: #49ff42;
         }
 
-        .footprint-guard__stats[data-rating="C"] {
+        .${classes.sentinelStats}[data-rating="C"] {
            background: #70ff01;
         }
 
-        .footprint-guard__stats[data-rating="D"] {
+        .${classes.sentinelStats}[data-rating="D"] {
            background: #f9ff00;
         }
 
-        .footprint-guard__stats[data-rating="E"] {
+        .${classes.sentinelStats}[data-rating="E"] {
            background: #fea900;
            color: white;
         }
 
-        .footprint-guard__stats[data-rating="F"] {
+        .${classes.sentinelStats}[data-rating="F"] {
            background: #fd0100;
            color: white;
         }
-
-
-        .footprint-guard__bytes {
-            width: 100%;
-        }
-
-        .footprint-guard__size-transferred {
-            font-size: 0.8em;
-        }
-
-        .footprint-guard-resource--force-relative {
-            position: relative;
-        }
-
-        .footprint-guard-resource {
-            z-index: 1;
-            padding: 20px;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .footprint-guard-resource__content {
-            display: none;
-            transition-duration: 500ms;
-            transition-property: all;
-            padding: 20px;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background: red;
-            color: #fff;
-            width: 50%;
-            height: 50%;
-        }
-
-
-        .footprint-guard-resource--dirty .footprint-guard-resource__content {
-            display: flex;
-        }
-
-        .footprint-guard-resource__bytes {
-            text-wrap: nowrap;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .footprint-guard-resource__max {
-            overflow: hidden;
-            transition-property: all;
-            transition-duration: 500ms;
-            font-size: 0;
-            line-height: 0;
-            font-weight: bold;
-        }
-
-         .footprint-guard-resource:hover .footprint-guard-resource__content {
-            min-width: 200px;
-            min-height: 200px;
-            width: 100%;
-            height: 100%;
-         }
-
-        .footprint-guard-resource:hover .footprint-guard-resource__max {
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
     </style>
 `
 export default styles

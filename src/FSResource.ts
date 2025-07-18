@@ -1,19 +1,20 @@
-import { createHash, formatBytes } from './utils'
-import type { FSentinelOptions } from './types.ts'
+import { formatBytes } from './utils'
+import type { FSOptions } from './types.ts'
+import FSConsts from './FSConsts.ts'
 
-export default class FSentinelResource {
+export default class FSResource {
   public url: string
   public size: number
-  public options: FSentinelOptions
+  public options: FSOptions
 
-  constructor(resource: PerformanceResourceTiming, options: FSentinelOptions) {
+  constructor(resource: PerformanceResourceTiming, options: FSOptions) {
     this.url = resource.name
-    this.size = FSentinelResource.sizeFromResource(resource)
+    this.size = FSResource.sizeFromResource(resource)
     this.options = options
   }
 
   public updateIfNeeded(resource: PerformanceResourceTiming): boolean {
-    const newSize = FSentinelResource.sizeFromResource(resource)
+    const newSize = FSResource.sizeFromResource(resource)
     if (this.size !== newSize) {
       this.size = newSize
       return true
@@ -30,7 +31,7 @@ export default class FSentinelResource {
   }
 }
 
-function _renderResourceHint(element: Element, resource: FSentinelResource) {
+function _renderResourceHint(element: Element, resource: FSResource) {
   if (resource.size < resource.options.ignoreResourcesBelowBytesThreshold)
     return
 
@@ -62,20 +63,21 @@ function _renderResourceHint(element: Element, resource: FSentinelResource) {
       resource.options.maxBytesPerResourceThreshold
     )
 
-    // TODO: strange behavior when resizing the browser window down and then up again. Maybe still flagged for a resource
-    // that was loaded but not used anymore -> srcset images?
     if (resource.size > maxSize && element instanceof HTMLElement) {
       const uuid = crypto.randomUUID()
-      hintTarget.classList.add('dirty')
-      hintTarget.style.setProperty('--dirty-filter', `url(#${uuid})`)
-
-      const panel = svgDataURI(
-        `<rect width="50%" height="50%" x="25%" y="25%" fill='#fd0100' />`
+      hintTarget.classList.add(FSConsts.cssClass.resource)
+      hintTarget.classList.add(FSConsts.cssClass.resourceDirty)
+      hintTarget.style.setProperty(
+        FSConsts.cssVar.resourceDirtyFilter,
+        `url(#${uuid})`
       )
 
       const useSmallText = rect.height < 200 || rect.width < 200
 
-      const content = svgDataURI(
+      const svgPanel = svgDataURI(
+        `<rect width="50%" height="50%" x="25%" y="25%" fill='#fd0100' />`
+      )
+      const svgPanelContent = svgDataURI(
         `
             <text x="50%" y="50%" text-anchor="middle" fill="white" font-family="sans-serif">
                 <tspan x="50%" dy="-2" font-size="${useSmallText ? 12 : 20}" font-weight="bold">${formatBytes(resource.size)}</tspan>
@@ -90,10 +92,10 @@ function _renderResourceHint(element: Element, resource: FSentinelResource) {
           <svg style="display: none;">
             <defs>
               <filter id="${uuid}">
-                <feImage href="${panel}" result="panel"/>
-                <feImage href="${content}" result="content"/>
-                <feBlend in="SourceGraphic" in2="panel" mode="overlay" result="l1"/>
-                <feBlend in="l1" in2="content" mode="overlay"/>
+                <feImage href="${svgPanel}" result="panel"/>
+                <feImage href="${svgPanelContent}" result="panelContent"/>
+                <feBlend in="SourceGraphic" in2="panel" mode="overlay" result="layer01"/>
+                <feBlend in="layer01" in2="panelContent" mode="overlay" result="layer02"/>
               </filter>
             </defs>
           </svg>

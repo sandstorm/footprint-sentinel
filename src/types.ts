@@ -1,32 +1,32 @@
-import FSentinelResource from "./FSentinelResource.ts";
+import type FSResource from './FSResource.ts'
 
-export type FSentinelOptions = {
-    isActivated: boolean;
-    showFootprint: boolean;
-    showResourceHints: boolean;
-    maxBytesPer100x100Threshold: number;
-    maxBytesPerResourceThreshold: number;
-    ignoreResourcesBelowBytesThreshold: number;
-    guardZIndex: number;
-    resourceFilter: (url: string) => boolean;
-    onInitialFootprint?: (footprint: FootprintGuardResult) => void;
-    onFootprintChange?: (footprint: FootprintGuardChangeResult) => void;
+export type FSOptions = {
+  isActivated: boolean
+  showFootprint: boolean
+  showResourceHints: boolean
+  maxBytesPer100x100Threshold: number
+  maxBytesPerResourceThreshold: number
+  ignoreResourcesBelowBytesThreshold: number
+  fsZIndex: number
+  resourceFilter: (url: string) => boolean
+  onInitialFootprint?: (footprint: FSResult) => void
+  onFootprintChange?: (footprint: FSChangeResult) => void
 }
 
-export type FootprintGuardResult = {
-    total: {bytes: number, bytesFormatted: string, rating: string}
-    lastDelta: {bytes: number, bytesFormatted: string}
+export type FSResult = {
+  total: { bytes: number; bytesFormatted: string; rating: string }
+  lastDelta: { bytes: number; bytesFormatted: string }
 }
 
-export type FootprintGuardChangeResult = {
-    total: {bytes: number, bytesFormatted: string, rating: string}
-    lastDelta: {bytes: number, bytesFormatted: string}
+export type FSChangeResult = {
+  total: { bytes: number; bytesFormatted: string; rating: string }
+  lastDelta: { bytes: number; bytesFormatted: string }
 }
 
-export type FSentinelRating = 'A+' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+export type FSRating = 'A+' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 
-export type FSentinelResourcesOptions = {
-    fgOptions: FSentinelOptions
-    onResourceUpdated: (resource: FSentinelResource) => void
-    onInitialFootprint: () => void
+export type FSResourcesOptions = {
+  fsOptions: FSOptions
+  onResourceUpdated: (resource: FSResource) => void
+  onInitialFootprint: () => void
 }
