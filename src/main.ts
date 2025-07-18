@@ -2,7 +2,7 @@ import type { FSentinelOptions, FootprintGuardResult } from './types.ts'
 import { defaultOptions } from './FSentinelOptions.ts'
 import FSentinelRessources from './FSentinelResources.ts'
 import {
-  findElementsWithSearchTerm,
+  findElementsWithUrl,
   formatBytes,
   getSizeFactorForBytes,
 } from './utils.ts'
@@ -150,7 +150,8 @@ export default class FootprintSentinel extends EventTarget {
     if (resource.size < this.fgOptions.ignoreResourcesBelowBytesThreshold) {
       return
     }
-    findElementsWithSearchTerm(resource.url).forEach((element: Element) => {
+
+    findElementsWithUrl(new URL(resource.url)).forEach((element: Element) => {
       resource.renderHint(element)
     })
   }

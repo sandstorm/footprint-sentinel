@@ -1,5 +1,16 @@
 const styles = `
     <style>
+        .test {
+            background: green;
+            pointer-events: none;
+        }
+        
+        .dirty {
+          filter: var(--dirty-filter);
+        }
+        
+      
+
         .footprint-guard {
             display: flex;
             flex-direction: column;
@@ -142,4 +153,4 @@ const styles = `
 
     </style>
 `
-export default styles;
+export default styles

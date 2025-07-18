@@ -1,46 +1,50 @@
 export function createShortHashSync(input: String) {
-    let hash = 0;
+  let hash = 0
 
-    for (let i = 0; i < input.length; i++) {
-        const char = input.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32-bit integer
-    }
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
 
-    // Convert to positive hex string
-    const hexHash = Math.abs(hash).toString(16);
+  // Convert to positive hex string
+  const hexHash = Math.abs(hash).toString(16)
 
-    // Pad with zeros if needed and truncate to desired length
-    return hexHash.padStart(8, '0').substring(0, length);
+  // Pad with zeros if needed and truncate to desired length
+  return hexHash.padStart(8, '0').substring(0, length)
 }
 
 export function formatBytes(bytes: number): string {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(i > 1 ? 2 : 0)) + ' ' + sizes[i]
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return (
+    parseFloat((bytes / Math.pow(k, i)).toFixed(i > 1 ? 2 : 0)) + ' ' + sizes[i]
+  )
 }
 
+export function getSizeFactorForBytes(
+  bytes: number,
+  maxFactor: number = 8
+): number {
+  const kb = bytes / 1024
 
-export function getSizeFactorForBytes(bytes: number, maxFactor: number = 8): number {
-    const kb = bytes / 1024
+  // Define your range
+  const maxKb = 2419.56 // Your F threshold
 
-    // Define your range
-    const maxKb = 2419.56 // Your F threshold
+  // Linear interpolation from 1 to maxFactor
+  const factor = 1 + (kb / maxKb) * (maxFactor - 1)
 
-    // Linear interpolation from 1 to maxFactor
-    const factor = 1 + ((kb / maxKb) * (maxFactor - 1))
-
-    // Clamp between 1 and maxFactor
-    return Math.min(maxFactor, Math.max(1, factor))
+  // Clamp between 1 and maxFactor
+  return Math.min(maxFactor, Math.max(1, factor))
 }
 
-export function findElementsWithSearchTerm(searchTerm: string, caseSensitive = false) {
-    // WHY not *
-    // Performance reasons, we only want to search for elements that are likely to have a src or href attribute
-    // -> feel free to change this selector to include more elements if needed
-    const allElements = document.querySelectorAll(`
+export function findElementsWithUrl(url: URL, caseSensitive = false) {
+  // WHY not *
+  // Performance reasons, we only want to search for elements that are likely to have a src or href attribute
+  // -> feel free to change this selector to include more elements if needed
+  const allElements = document.querySelectorAll(`
       img[src],
       img[srcset],
       script[src],
@@ -57,32 +61,38 @@ export function findElementsWithSearchTerm(searchTerm: string, caseSensitive = f
       frame[src],
       [style]
     `)
-    const matchingElements: any = []
+  const matchingElements: any = []
 
-    allElements.forEach(element => {
-        // Get all attributes
-        const attributes = element.attributes
+  allElements.forEach(element => {
+    const searchTerm = url.pathname + url.search + url.hash
+    console.log(searchTerm)
 
-        for (let i = 0; i < attributes.length; i++) {
-            const attr = attributes[i]
-            const value = caseSensitive ? attr.value : attr.value.toLowerCase()
-            const search = caseSensitive ? searchTerm : searchTerm.toLowerCase()
+    // Get all attributes
+    const attributes = element.attributes
 
-            if (value.includes(search)) {
-                matchingElements.push(element)
-                break // Don't add same element multiple times
-            }
-        }
-    })
+    for (let i = 0; i < attributes.length; i++) {
+      const attr = attributes[i]
+      const value = caseSensitive ? attr.value : attr.value.toLowerCase()
+      const search = caseSensitive ? searchTerm : searchTerm.toLowerCase()
 
-    return matchingElements
+      if (value.includes(search)) {
+        matchingElements.push(element)
+        break // Don't add same element multiple times
+      }
+    }
+  })
+
+  return matchingElements
 }
 
-export function updateInnerTextIfChanged(newText: string, element: Element | undefined | null) {
-    if(element && element instanceof HTMLElement) {
-        const current =  element.innerText;
-        if( current !== newText) {
-            element.innerText = newText;
-        }
+export function updateInnerTextIfChanged(
+  newText: string,
+  element: Element | undefined | null
+) {
+  if (element && element instanceof HTMLElement) {
+    const current = element.innerText
+    if (current !== newText) {
+      element.innerText = newText
     }
+  }
 }
