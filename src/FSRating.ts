@@ -1,7 +1,15 @@
 import type { FSRating } from './types.ts'
 
+/**
+ * Get digital carbon rating according to Sustainable Web Design guidelines
+ * Evaluates the environmental impact of data transfer based on byte size
+ *
+ * @see {@link https://sustainablewebdesign.org/digital-carbon-ratings} for rating methodology
+ *
+ * @param bytes - bytes - The number of bytes to evaluate (must be non-negative)
+ * @returns The corresponding FSRating based on carbon footprint thresholds
+ */
 export function getRatingForBytes(bytes: number): FSRating {
-  // https://sustainablewebdesign.org/digital-carbon-ratings/
   const kb = bytes / 1024
   if (kb < 272.51) {
     return 'A+'

@@ -1,16 +1,22 @@
 import type { FSOptions } from './types.ts'
 
-export const fsDefaultOptions: FSOptions = {
-  // Activate the FootprintGuard functionality
-  // e.g. can be different for Neos backend and frontend
+/**
+ * Default options for the Footprint Sentinel.
+ * These options can be overridden by the user to customize the behavior of the sentinel.
+ */
+export const defaultOptions: FSOptions = {
+  // activate the Footprint Sentinel -> callbacks will work.
+  // if no ui is activated, footprint sentinel can be used to collect data, e.g. matomo or Google Analytics
   isActivated: true,
-  showFootprint: true,
+  // Show two bars in the bottom right corner of the screen. The initial and total footprints with their rating
+  showSentinel: true,
+  // Show resource hints in the DOM, if a resource exceeds the defined thresholds
   showResourceHints: true,
 
   // Thresholds for resource sizes based on the area they occupy (similar to what Lighthouse uses)
   // Can be used to debug srcset images, e.g. by resizing the browser window, new resources will loaded
   // and flagged if they exceed the threshold
-  //
+
   // For the default value we used claude ai + trial and error to find a good value
   maxBytesPer100x100Threshold: 10 * 1024,
 
@@ -22,10 +28,12 @@ export const fsDefaultOptions: FSOptions = {
   // Threshold for resources that should be ignored
   // e.g. small images that are used for icons, logos or similar. They might end up getting flagged
   // because of the maxBytesPer100x100Threshold, but do not contribute significantly to the overall footprint.
-  // This will also speed up finding relements using this resource in the DOM.
+  // Speed up the performance by ignoring these resources.
   ignoreResourcesBelowBytesThreshold: 40 * 1024,
 
-  fsZIndex: 1000,
+  // zIndex to be used for displaying the footprint sentinel. Change this if you have other elements overlapping
+  // the sentinel.
+  sentinelZIndex: 1000,
 
   // Default filter that allows all resources
   // Can be used to e.g. filter out Neos backend resources

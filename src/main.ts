@@ -5,7 +5,7 @@ import {
   getSizeFactorForBytes,
 } from './utils.ts'
 import styles from './styles.ts'
-import { fsDefaultOptions } from './FSOptions.ts'
+import { defaultOptions } from './FSOptions.ts'
 import type FSResource from './FSResource.ts'
 import FSRessources from './FSResources.ts'
 import { getRatingForBytes } from './FSRating.ts'
@@ -14,7 +14,7 @@ import FSConsts from './FSConsts.ts'
 export default class FootprintSentinel extends EventTarget {
   private static instance: FootprintSentinel
   private footprintElement: HTMLDivElement | null = null
-  private fgOptions: FSOptions = fsDefaultOptions
+  private fgOptions: FSOptions = defaultOptions
   private fgResources: FSRessources = FSRessources.later()
   private lastTotalBytes = 0
   private lastTotalBytesDebounceTimeout: number | null = null
@@ -26,7 +26,7 @@ export default class FootprintSentinel extends EventTarget {
       return FootprintSentinel.instance
     }
     this.fgOptions = {
-      ...fsDefaultOptions,
+      ...defaultOptions,
       ...options,
     }
 
@@ -37,7 +37,7 @@ export default class FootprintSentinel extends EventTarget {
         onInitialFootprint: this.handleInitialFootprint.bind(this),
       })
 
-      if (this.fgOptions.showFootprint) {
+      if (this.fgOptions.showSentinel) {
         this.footprintElement = this.addFootprintElement()
       }
 
@@ -98,7 +98,7 @@ export default class FootprintSentinel extends EventTarget {
   }
 
   private updateFootprint() {
-    if (!this.fgOptions?.showFootprint || !this.footprintElement) return
+    if (!this.fgOptions?.showSentinel || !this.footprintElement) return
 
     const totalBytes = this.fgResources.totalBytes()
     const initialBytes = this.fgResources.initialBytes || 0
@@ -166,7 +166,7 @@ export default class FootprintSentinel extends EventTarget {
     document.body.insertAdjacentHTML('beforeend', styles)
     const element = document.createElement('div')
     element.className = FSConsts.cssClass.sentinel
-    element.style.zIndex = this.fgOptions.fsZIndex.toString()
+    element.style.zIndex = this.fgOptions.sentinelZIndex.toString()
     document.body.appendChild(element)
 
     return element

@@ -1,6 +1,6 @@
 import type { FSResourcesOptions, FSOptions } from './types.ts'
 import FSResource from './FSResource.ts'
-import { fsDefaultOptions } from './FSOptions.ts'
+import { defaultOptions } from './FSOptions.ts'
 
 const UPDATE_INTERVAL_BEFORE_INITIAL_MS = 200
 const UPDATE_INTERVAL_AFTER_INITIAL_MS = 2000
@@ -19,7 +19,7 @@ export default class FSRessources {
 
   public static later(): FSRessources {
     return new FSRessources({
-      fsOptions: fsDefaultOptions,
+      fsOptions: defaultOptions,
       onResourceUpdated: () => null,
       onInitialFootprint: () => null,
     })

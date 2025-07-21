@@ -1,3 +1,6 @@
+/**
+ * Constants values for Footprint Sentinel
+ */
 export default class FSConsts {
   static cssClass = {
     resource: 'footprint-sentinel-resource',

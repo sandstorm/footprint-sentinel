@@ -2,12 +2,12 @@ import type FSResource from './FSResource.ts'
 
 export type FSOptions = {
   isActivated: boolean
-  showFootprint: boolean
+  showSentinel: boolean
   showResourceHints: boolean
   maxBytesPer100x100Threshold: number
   maxBytesPerResourceThreshold: number
   ignoreResourcesBelowBytesThreshold: number
-  fsZIndex: number
+  sentinelZIndex: number
   resourceFilter: (url: string) => boolean
   onInitialFootprint?: (footprint: FSResult) => void
   onFootprintChange?: (footprint: FSChangeResult) => void
