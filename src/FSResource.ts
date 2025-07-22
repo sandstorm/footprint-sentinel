@@ -132,12 +132,12 @@ export default class FSResource {
         }
 
         // WYH popper.js? -> We tried different approaches to position the hint.
-        //   * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
-        //     in a div or rely on a parent element with the right size so the UI does not look broken.
-        //   * Using a filter with an SVG to display the hint did not work in all browsers
-        //   * Placing an element before or after and then trying to position it with CSS was not reliable enough.
-        //   * Wrapping the element in a div has the chance of breaking the layout
-        //   * CSS anchor properties are not widely supported yet
+        //  * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
+        //    in a div or rely on a parent element with the right size so the UI does not look broken.
+        //  * Using a filter with an SVG to display the hint did not work in all browsers
+        //  * Placing an element before or after and then trying to position it with CSS was not reliable enough.
+        //  * Wrapping the element in a div has the chance of breaking the layout
+        //  * CSS anchor properties are not widely supported yet
         createPopper(hintTarget, hint, {
           placement: 'right-start',
           modifiers: [samePositionAndSize],

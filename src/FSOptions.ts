@@ -33,7 +33,7 @@ export const defaultOptions: FSOptions = {
 
   // zIndex to be used for displaying the footprint sentinel. Change this if you have other elements overlapping
   // the sentinel.
-  sentinelZIndex: 1000,
+  sentinelZIndex: 10000,
 
   // Default filter that allows all resources
   // Can be used to e.g. filter out Neos backend resources
