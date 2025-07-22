@@ -26,7 +26,7 @@ export type FSChangeResult = {
 export type FSRating = 'A+' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 
 export type FSResourcesOptions = {
-  fsOptions: FSOptions
+  options: FSOptions
   onResourceUpdated: (resource: FSResource) => void
   onInitialFootprint: () => void
 }

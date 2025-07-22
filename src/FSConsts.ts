@@ -3,8 +3,11 @@
  */
 export default class FSConsts {
   static cssClass = {
-    resource: 'footprint-sentinel-resource',
-    resourceDirty: 'footprint-sentinel-resource--dirty',
+    resourceHint: 'footprint-sentinel-hint',
+    resourceHintSmall: 'footprint-sentinel-hint--small',
+    resourceHintContent: 'footprint-sentinel-hint__content',
+    resourceHintText: 'footprint-sentinel-hint__text',
+    resourceHintTextBig: 'footprint-sentinel-hint__text--big',
     sentinel: 'footprint-sentinel',
     sentinelStats: 'footprint-sentinel__stats',
     sentinelStatsHide: 'footprint-sentinel__stats--hide',
@@ -15,6 +18,6 @@ export default class FSConsts {
   }
 
   static cssVar = {
-    resourceDirtyFilter: '--footprint-sentinel-dirty-filter',
+    // resourceDirtyFilter: '--footprint-sentinel-dirty-filter',
   }
 }

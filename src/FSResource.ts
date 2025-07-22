@@ -1,6 +1,7 @@
-import { formatBytes } from './utils'
 import type { FSOptions } from './types.ts'
+import { createPopperLite as createPopper, type Modifier } from '@popperjs/core'
 import FSConsts from './FSConsts.ts'
+import { formatBytes } from './utils.ts'
 
 /**
  * Data model created from a PerformanceResourceTiming object to tract he overall size of a resource.
@@ -97,65 +98,109 @@ export default class FSResource {
       )
 
       // ######### Rendering the hint #########
-      //
-      // WHY this much SVG code?: We want to be able to display formatted text to give some context to the user.
-      // We do not want to alter the markup. Add visible elements or even worse, wrap elements to be able to display the hint.
-      // Using a filter with an SVG allows us to display the hint without altering the DOM. It is CSS only ;)
 
       if (this.size > maxBytesAllowed) {
-        hintTarget.classList.add(FSConsts.cssClass.resource)
-        hintTarget.classList.add(FSConsts.cssClass.resourceDirty)
+        const hint = document.createElement('div')
+        hint.classList.add(FSConsts.cssClass.resourceHint)
 
-        // We need a UUID to link the filter to the element
-        const uuid = crypto.randomUUID()
+        if (rect.height < 200 || rect.width < 200) {
+          hint.classList.add(FSConsts.cssClass.resourceHintSmall)
+        }
 
-        hintTarget.style.setProperty(
-          FSConsts.cssVar.resourceDirtyFilter,
-          `url(#${uuid})`
-        )
-
-        // Smaller text if the element is small -> prevent the ui from looking broken in most cases
-        const useSmallText = rect.height < 200 || rect.width < 200
-
-        // The red rectangular background of the hint
-        const svgPanel = _svgDataURI(
-          `<rect width="50%" height="50%" x="25%" y="25%" fill='#fd0100' />`
-        )
-
-        // The content of the hint
-        const svgPanelContent = _svgDataURI(
-          `
-            <text x="50%" y="50%" text-anchor="middle" fill="white" font-family="sans-serif">
-                <tspan x="50%" dy="-2" font-size="${useSmallText ? 12 : 20}" font-weight="bold">${formatBytes(this.size)}</tspan>
-                <tspan x="50%" dy="${useSmallText ? 14 : 20}" font-size="${useSmallText ? 12 : 14}">max ${formatBytes(maxBytesAllowed)}</tspan>
-            </text>
+        hint.innerHTML = `
+          <div class="${FSConsts.cssClass.resourceHintContent}">
+            <strong style="font-size: 1.2em">${formatBytes(this.size)}</strong>
+            <span>max ${formatBytes(maxBytesAllowed)}</span>
+          </div>
         `
-        )
 
-        // inserting the SVG filter into the DOM, using the uuid to link it to the element.
-        // display: none to prevent any conflicts with the layout.
+        hintTarget.insertAdjacentElement('afterend', hint)
+
+        // aligning the hint with the popper
+        const samePositionAndSize: Modifier<any, any> = {
+          name: 'samePositionAndSize',
+          enabled: true,
+          phase: 'beforeWrite',
+          requires: ['computeStyles'],
+          fn: ({ state }) => {
+            state.styles.popper.width = `${state.rects.reference.width}px`
+            state.styles.popper.height = `${state.rects.reference.height}px`
+
+            state.styles.popper.left = `-${state.rects.reference.width}px`
+            state.styles.popper.zIndex = '1'
+          },
+        }
+
+        // WYH popper.js? -> We tried different approaches to position the hint.
+        //   * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
+        //     in a div or rely on a parent element with the right size so the UI does not look broken.
+        //   * Using a filter with an SVG to display the hint did not work in all browsers
+        //   * Placing an element before or after and then trying to position it with CSS was not reliable enough.
+        //   * Wrapping the element in a div has the chance of breaking the layout
+        //   * CSS anchor properties are not widely supported yet
+        createPopper(hintTarget, hint, {
+          placement: 'right-start',
+          modifiers: [samePositionAndSize],
+        })
+
+        // The following code felt like a good idea. We do not introduce new elements into the DOM (except for the filter).
+        // Sadly it did not work for firefox and safari, so we had to use the popper.js library to position the hint.
+        // TODO LATER: Maybe we can revisit this and use the filter again, but it is not a priority right now.
         //
-        // In the filter we use different layers.
-        //  * The first layer SourceGraphic
-        //  * The second layer is the red rectangle applied to the first layer
-        //  * The third layer is the text content applied to the second layer
+        //   //WHY this much SVG code?: We want to be able to display formatted text to give some context to the user.
+        //   //We do not want to alter the markup. Add visible elements or even worse, wrap elements to be able to display the hint.
+        //   //Using a filter with an SVG allows us to display the hint without altering the DOM. It is CSS only ;)
         //
-        // We played around with different blend modes, but overlay looks best in most cases.
-        hintTarget.insertAdjacentHTML(
-          'beforebegin',
-          `
-          <svg style="display: none;">
-            <defs>
-              <filter id="${uuid}">
-                <feImage href="${svgPanel}" result="panel"/>
-                <feImage href="${svgPanelContent}" result="panelContent"/>
-                <feBlend in="SourceGraphic" in2="panel" mode="overlay" result="layer01"/>
-                <feBlend in="layer01" in2="panelContent" mode="overlay" result="layer02"/>
-              </filter>
-            </defs>
-          </svg>
-      `
-        )
+        //   // We need a UUID to link the filter to the element
+        //   const uuid = crypto.randomUUID()
+        //
+        //   hintTarget.style.setProperty(
+        //     FSConsts.cssVar.resourceDirtyFilter,
+        //     `url(#${uuid})`
+        //   )
+        //
+        //   // Smaller text if the element is small -> prevent the ui from looking broken in most cases
+        //   const useSmallText = rect.height < 200 || rect.width < 200
+        //
+        //   // The red rectangular background of the hint
+        //   const svgPanel = _svgDataURI(
+        //     `<rect width="50%" height="50%" x="25%" y="25%" fill='#fd0100' />`
+        //   )
+        //
+        //   // The content of the hint
+        //   const svgPanelContent = _svgDataURI(
+        //     `
+        //       <text x="50%" y="50%" text-anchor="middle" fill="white" font-family="sans-serif">
+        //           <tspan x="50%" dy="-2" font-size="${useSmallText ? 12 : 20}" font-weight="bold">${formatBytes(this.size)}</tspan>
+        //           <tspan x="50%" dy="${useSmallText ? 14 : 20}" font-size="${useSmallText ? 12 : 14}">max ${formatBytes(maxBytesAllowed)}</tspan>
+        //       </text>
+        //   `
+        //   )
+        //
+        //   // inserting the SVG filter into the DOM, using the uuid to link it to the element.
+        //   // display: none to prevent any conflicts with the layout.
+        //   //
+        //   // In the filter we use different layers.
+        //   //  * The first layer SourceGraphic
+        //   //  * The second layer is the red rectangle applied to the first layer
+        //   //  * The third layer is the text content applied to the second layer
+        //   //
+        //   // We played around with different blend modes, but overlay looks best in most cases.
+        //   hintTarget.insertAdjacentHTML(
+        //     'beforebegin',
+        //     `
+        //     <svg style="display: none;">
+        //       <defs>
+        //         <filter id="${uuid}">
+        //           <feImage href="${svgPanel}" result="panel"/>
+        //           <feImage href="${svgPanelContent}" result="panelContent"/>
+        //           <feBlend in="SourceGraphic" in2="panel" mode="overlay" result="layer01"/>
+        //           <feBlend in="layer01" in2="panelContent" mode="overlay" result="layer02"/>
+        //         </filter>
+        //       </defs>
+        //     </svg>
+        // `
+        //   )
       }
     }
   }
@@ -166,13 +211,15 @@ export default class FSResource {
  * to ensure it is valid. Using a data URI seem to be way that hast the best browser support for filters. Using
  * svg directly in the filter did not work in the prototype.
  *
+ * // TODO LATER: Maybe we can revisit this and use the filter again, but it is not a priority right now.
+ *
  * @param content - The inner SVG content to be wrapped
  * @returns A data URI string representing the SVG image
  */
-function _svgDataURI(content: string) {
-  const svgMarkup = `<svg xmlns='http://www.w3.org/2000/svg' width='100%%' height='100%'>${content}</svg>`
-  return `data:image/svg+xml,${encodeURIComponent(svgMarkup)}`
-}
+// function _svgDataURI(content: string) {
+//   const svgMarkup = `<svg xmlns='http://www.w3.org/2000/svg' width='100%%' height='100%'>${content}</svg>`
+//   return `data:image/svg+xml,${encodeURIComponent(svgMarkup)}`
+// }
 
 /**
  * How to get the size of a resource from a PerformanceResourceTiming object.

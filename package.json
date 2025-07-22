@@ -15,5 +15,8 @@
     "prettier-plugin-sh": "^0.18.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.4"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8"
   }
 }

@@ -32,7 +32,7 @@ export default class FootprintSentinel extends EventTarget {
 
     if (this.fgOptions.isActivated) {
       this.fgResources = new FSRessources({
-        fsOptions: this.fgOptions,
+        options: this.fgOptions,
         onResourceUpdated: this.handleResourceUpdated.bind(this),
         onInitialFootprint: this.handleInitialFootprint.bind(this),
       })

@@ -1,7 +1,6 @@
 import FSConsts from './FSConsts.ts'
 
 const classes = FSConsts.cssClass
-const vars = FSConsts.cssVar
 
 const styles = `
     <style>
@@ -10,12 +9,31 @@ const styles = `
             pointer-events: none;
         }
         
-        .${classes.resourceDirty} {
-          filter: var(${vars.resourceDirtyFilter});
+        .${classes.resourceHint} {
+           box-sizing: border-box;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           font-size: 14px;
+           pointer-events: none;
         }
         
-      
-
+        .${classes.resourceHintSmall}{
+           font-size: 10px;
+        }
+        
+        .${classes.resourceHintContent} {
+            padding: 5px;
+            width: 50%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fd0100;
+            color: white;
+        }
+        
         .${classes.sentinel} {
             display: flex;
             flex-direction: column;
