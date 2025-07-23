@@ -1,156 +1,167 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="./demo/main.css">
     <title>Vite + TS</title>
-  </head>
-  <body>
-    <header class="header"></header>
-    <div class="container" style="height: 200vh">
-      <h1>Footprint Sentinel Demo</h1>
+</head>
+<body>
+<header class="header"></header>
+<div class="container" style="height: 200vh">
+    <h1>Footprint Sentinel Demo</h1>
 
-      <h2>Options</h2>
+    <h2>Options</h2>
 
-      <h3>Choose option</h3>
-      <div class="button mode-switch" data-mode="">default</div>
-      <div class="button mode-switch" data-mode="easy">easy</div>
-      <div class="button mode-switch" data-mode="hard">hard</div>
+    <h3>Choose option</h3>
+    <div class="button mode-switch" data-mode="">default</div>
+    <div class="button mode-switch" data-mode="easy">easy</div>
+    <div class="button mode-switch" data-mode="hard">hard</div>
+    <div class="button mode-switch" data-mode="headless">headless</div>
 
-      <h3>Reload the page</h3>
+    <h3>Reload the page</h3>
 
-      <strong>[CMD]+[Shift]+[R]</strong> on Mac or <strong>[Ctrl]+[Shift]+[R]</strong> on Windows/Linux or <strong>open dev tools</strong>.
+    <strong>[CMD]+[Shift]+[R]</strong> on Mac or <strong>[Ctrl]+[Shift]+[R]</strong> on Windows/Linux or <strong>open
+    dev tools</strong>.
 
-      <h2>Ratings and Colors</h2>
+    <h2>Resource hints when exceeding max for a resource</h2>
+    <img loading="lazy" src="./demo/images/3200/photo-1479030160180-b1860951d696.webp" onclick="alert('Image clicked')">
 
-      If the sentinel ui is activated in the options two bars will be shown in the bottom right corner of the screen.
-      They show the initial footprint and rating and the total footprint and rating of the page. These are the colors used for the ratings:
-
-      <br/>
-      <br/>
-
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <div class="footprint-sentinel__stats" data-rating="A+" style="width: 100px; transition-property: none">A+</div>
-        <div class="footprint-sentinel__stats" data-rating="A" style="width: 110px; transition-property: none">A</div>
-        <div class="footprint-sentinel__stats" data-rating="B" style="width: 120px; transition-property: none">B</div>
-        <div class="footprint-sentinel__stats" data-rating="C" style="width: 130px; transition-property: none">C</div>
-        <div class="footprint-sentinel__stats" data-rating="D" style="width: 140px; transition-property: none">D</div>
-        <div class="footprint-sentinel__stats" data-rating="E" style="width: 150px; transition-property: none">E</div>
-        <div class="footprint-sentinel__stats" data-rating="F" style="width: 160px; transition-property: none">F</div>
-      </div>
-
-
-
-      <h2>Resource hints when exceeding max for a resource</h2>
-      <img loading="lazy" src="./demo/images/3200/photo-1479030160180-b1860951d696.webp" onclick="alert('Image clicked')">
-
-      <h2>Resource hints when exceeding max based on the rendered size</h2>
-      <div class="grid">
+    <h2>Resource hints when exceeding max based on the rendered size</h2>
+    <div class="grid">
         <img loading="lazy" src="./demo/images/400/photo-1441974231531-c6227db76b6e.webp">
         <img loading="lazy" src="./demo/images/800/photo-1470071459604-3b5ec3a7fe05.webp">
         <img loading="lazy" src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
-        <img id="dynamic-image" style="display: none;" loading="lazy" src="./demo/images/3200/photo-1506744038136-46273834b3fb.webp">
-      </div>
-
-      <div style="display: flex; justify-content: center;"><div class="button" onclick="document.getElementById('dynamic-image').style.setProperty('display', null)">Dynamically add image</div></div>
-      <br/>
-      <br/>
-
-      <img style="width: 100px; max-width: 100%;" loading="lazy" src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
-      <br/>
-      <br/>
-      <img style="width: 200px; max-width: 100%;" loading="lazy" src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
-      <br/>
-      <br/>
-      <img style="width: 400px; max-width: 100%;" loading="lazy" src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
-      <br/>
-      <br/>
-      <img style="width: 800px; max-width: 100%;" loading="lazy" src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
-      <br/>
-      <br/>
-
-      <h2>Picture Element</h2>
-        <picture style="width: 200px; max-width: 100%; position: relative">
-          <source src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp">
-          <img loading="lazy" src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp" alt="A beautiful landscape">
-        </picture>
-        <br/>
-        <br/>
-        <picture style="width: 800px; max-width: 100%; position: relative">
-          <source src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp">
-          <img loading="lazy" src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp" alt="A beautiful landscape">
-        </picture>
-
-      <h2>Video Element Poster</h2>
-        <video preload="metadata" controls style="width: 200px; max-width: 100%;" poster="./demo/bbb-splash.png">
-            <source src="./demo/BigBuckBunny_320x180_shortened.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-      <br/>
-      <br/>
-      <video preload="metadata" controls style="width: 800px; max-width: 100%" poster="./demo/bbb-splash.png">
-        <source src="./demo/BigBuckBunny_320x180_shortened.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-
-      <h2>Keep scrolling to test lazyload</h2>
-      <div class="spacer"></div>
-      <img loading="lazy" src="./demo/images/1600/photo-1441974231531-c6227db76b6e.webp">
-      <div class="spacer"></div>
-      <img loading="lazy" src="./demo/images/1600/photo-1470071459604-3b5ec3a7fe05.webp">
-      <div class="spacer"></div>
-      <img loading="lazy" src="./demo/images/1600/photo-1497436072909-60f360e1d4b1.webp">
-      <div class="spacer"></div>
-      <img loading="lazy" src="./demo/images/1600/photo-1465146344425-f00d5f5c8f07.webp">
-      <div class="spacer"></div>
-      <img loading="lazy" src="./demo/images/1600/photo-1458668383970-8ddd3927deed.webp">
-      <div class="spacer"></div>
+        <img id="dynamic-image" style="display: none;" loading="lazy"
+             src="./demo/images/3200/photo-1506744038136-46273834b3fb.webp">
     </div>
 
-    <footer class="footer"></footer>
+    <div style="display: flex; justify-content: center;">
+        <div class="button" onclick="document.getElementById('dynamic-image').style.setProperty('display', null)">
+            Dynamically add image
+        </div>
+    </div>
+    <br/>
+    <br/>
 
-    <script type="module">
-      import FootprintSentinel from "./src/main.ts";
+    <img style="width: 100px; max-width: 100%;" loading="lazy"
+         src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
+    <br/>
+    <br/>
+    <img style="width: 200px; max-width: 100%;" loading="lazy"
+         src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
+    <br/>
+    <br/>
+    <img style="width: 400px; max-width: 100%;" loading="lazy"
+         src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
+    <br/>
+    <br/>
+    <img style="width: 800px; max-width: 100%;" loading="lazy"
+         src="./demo/images/1600/photo-1501854140801-50d01698950b.webp">
+    <br/>
+    <br/>
 
-        // Add event listener to all elements with class 'mode-switch'
-        document.querySelectorAll('.mode-switch').forEach((element) => {
-          element.addEventListener('click', (e) => {
+    <h2>Picture Element</h2>
+    <picture style="width: 200px; max-width: 100%; position: relative">
+        <source src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp">
+        <img loading="lazy" src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp" alt="A beautiful landscape">
+    </picture>
+    <br/>
+    <br/>
+    <picture style="width: 800px; max-width: 100%; position: relative">
+        <source src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp">
+        <img loading="lazy" src="./demo/images/800/photo-1497436072909-60f360e1d4b1.webp" alt="A beautiful landscape">
+    </picture>
+
+    <h2>Video Element Poster</h2>
+    <video preload="metadata" controls style="width: 200px; max-width: 100%;" poster="./demo/bbb-splash.png">
+        <source src="./demo/BigBuckBunny_320x180_shortened.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <br/>
+    <br/>
+    <video preload="metadata" controls style="width: 800px; max-width: 100%" poster="./demo/bbb-splash.png">
+        <source src="./demo/BigBuckBunny_320x180_shortened.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h2>Keep scrolling to test lazyload</h2>
+    <div class="spacer"></div>
+    <img loading="lazy" src="./demo/images/1600/photo-1441974231531-c6227db76b6e.webp">
+    <div class="spacer"></div>
+    <img loading="lazy" src="./demo/images/1600/photo-1470071459604-3b5ec3a7fe05.webp">
+    <div class="spacer"></div>
+    <img loading="lazy" src="./demo/images/1600/photo-1497436072909-60f360e1d4b1.webp">
+    <div class="spacer"></div>
+    <img loading="lazy" src="./demo/images/1600/photo-1465146344425-f00d5f5c8f07.webp">
+    <div class="spacer"></div>
+    <img loading="lazy" src="./demo/images/1600/photo-1458668383970-8ddd3927deed.webp">
+    <div class="spacer"></div>
+</div>
+
+<footer class="footer"></footer>
+
+<script type="module">
+    import FootprintSentinel from "./src/main.ts";
+
+    // Add event listener to all elements with class 'mode-switch'
+    document.querySelectorAll('.mode-switch').forEach((element) => {
+        element.addEventListener('click', (e) => {
             const mode = e.target.getAttribute('data-mode');
             const params = new URLSearchParams(window.location.search);
             params.set('mode', mode);
             window.location.href = window.location.pathname + '?' + params.toString();
-          });
         });
+    });
 
 
-      const mode = new URLSearchParams(window.location.search).get('mode');
+    const mode = new URLSearchParams(window.location.search).get('mode');
 
-      switch (mode) {
+    switch (mode) {
         case null:
         case '':
-          new FootprintSentinel({
-            isActivated: true,
-          })
-          break;
+            new FootprintSentinel({
+                isActivated: true,
+            })
+            break;
         case 'easy':
-          new FootprintSentinel({
-              isActivated: true,
-              showSentinel: true,
-              showResourceHints: true,
-              maxBytesPerResourceThreshold: 300 * 1024,
-              maxBytesPer100x100Threshold: 15 * 1024,
-          })
-          break;
+            new FootprintSentinel({
+                isActivated: true,
+                showSentinel: true,
+                showResourceHints: true,
+                maxBytesPerResourceThreshold: 300 * 1024,
+                maxBytesPer100x100Threshold: 15 * 1024,
+            })
+            break;
         case 'hard':
-          new FootprintSentinel({
-            isActivated: true,
-            showSentinel: true,
-            showResourceHints: true,
-            maxBytesPerResourceThreshold: 150 * 1024,
-            maxBytesPer100x100Threshold: 2 * 1024,
-          })
-      }
-    </script>
-  </body>
+            new FootprintSentinel({
+                isActivated: true,
+                showSentinel: true,
+                showResourceHints: true,
+                maxBytesPerResourceThreshold: 150 * 1024,
+                maxBytesPer100x100Threshold: 2 * 1024,
+            })
+            break;
+        case 'headless':
+            const customUI = document.createElement("div")
+            customUI.classList.add("custom-ui");
+            document.body.append(customUI)
+
+            new FootprintSentinel({
+                isActivated: true,
+                showSentinel: false,
+                showResourceHints: false,
+                maxBytesPerResourceThreshold: 150 * 1024,
+                maxBytesPer100x100Threshold: 2 * 1024,
+                onInitialFootprint: (footprint) => console.log("onInitialFootprint", footprint),
+                onFootprintChange: (footprint) => {
+                    console.log("onFootprintChange", footprint)
+                    customUI.innerHTML = footprint.total.rating;
+                    customUI.style.setProperty("background", footprint.total.color);
+                }
+            })
+            break;
+    }
+</script>
+</body>
 </html>

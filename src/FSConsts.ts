@@ -1,3 +1,5 @@
+import type { FSRating } from './types.ts'
+
 /**
  * Constants values for Footprint Sentinel
  */
@@ -17,7 +19,17 @@ export default class FSConsts {
     sentinelLabel: 'footprint-sentinel__label',
   }
 
+  static ratingColors: Record<FSRating, string> = {
+    'A+': '#00febc',
+    A: '#1aff93',
+    B: '#49ff42',
+    C: '#70ff01',
+    D: '#f9ff00',
+    E: '#fea900',
+    F: '#fd0100',
+  }
+
   static cssVar = {
-    // resourceDirtyFilter: '--footprint-sentinel-dirty-filter',
+    ratingColor: '--footprint-sentinel-rating-color',
   }
 }

@@ -38,6 +38,22 @@ h3 {
     z-index: 1000;
 }
 
+.custom-ui {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    font-size: 100px;
+    font-weight: bold;
+    background: #ccc;
+    border-bottom-right-radius: 20px;
+    z-index: 2000;
+}
+
 .container {
     padding: 10px 20px;
     margin: 0 auto;

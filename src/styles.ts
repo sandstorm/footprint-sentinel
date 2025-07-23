@@ -4,11 +4,9 @@ const classes = FSConsts.cssClass
 
 const styles = `
     <style>
-        .test {
-            background: green;
-            pointer-events: none;
-        }
-        
+        :root    {    
+            ${FSConsts.cssVar.ratingColor}: #ccc;
+        }   
         .${classes.resourceHint} {
            box-sizing: border-box;
            display: flex;
@@ -48,7 +46,7 @@ const styles = `
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            background: #d3d3d3;
+            background: var(${FSConsts.cssVar.ratingColor});
             transition-duration: 5000ms;
             transition-property: all;
             padding: 5px 10px;
@@ -70,36 +68,6 @@ const styles = `
             align-items: center;
             font-size: 14px;
             line-height: 1.2;
-        }
-
-        .${classes.sentinelStats}[data-rating="A+"] {
-           background: #00febc;
-        }
-
-        .${classes.sentinelStats}[data-rating="A"] {
-           background: #1aff93;
-        }
-
-        .${classes.sentinelStats}[data-rating="B"] {
-           background: #49ff42;
-        }
-
-        .${classes.sentinelStats}[data-rating="C"] {
-           background: #70ff01;
-        }
-
-        .${classes.sentinelStats}[data-rating="D"] {
-           background: #f9ff00;
-        }
-
-        .${classes.sentinelStats}[data-rating="E"] {
-           background: #fea900;
-           color: white;
-        }
-
-        .${classes.sentinelStats}[data-rating="F"] {
-           background: #fd0100;
-           color: white;
         }
     </style>
 `

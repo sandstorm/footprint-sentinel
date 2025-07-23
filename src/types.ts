@@ -14,12 +14,22 @@ export type FSOptions = {
 }
 
 export type FSResult = {
-  total: { bytes: number; bytesFormatted: string; rating: string }
+  total: {
+    bytes: number
+    bytesFormatted: string
+    rating: string
+    color: string
+  }
   lastDelta: { bytes: number; bytesFormatted: string }
 }
 
 export type FSChangeResult = {
-  total: { bytes: number; bytesFormatted: string; rating: string }
+  total: {
+    bytes: number
+    bytesFormatted: string
+    rating: string
+    color: string
+  }
   lastDelta: { bytes: number; bytesFormatted: string }
 }
 
