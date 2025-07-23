@@ -1,18 +1,8 @@
-export function createHash(data: string) {
-  const seeds = [5381, 33, 65599, 131071] // Different prime seeds
-  let result = ''
-
-  for (const seed of seeds) {
-    let hash = seed
-    for (let i = 0; i < data.length; i++) {
-      hash = (hash << 5) + hash + data.charCodeAt(i)
-    }
-    result += (hash >>> 0).toString(16).padStart(8, '0')
-  }
-
-  return result
-}
-
+/**
+ * Bytes to human-readable format
+ *
+ * @param bytes
+ */
 export function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
@@ -23,6 +13,12 @@ export function formatBytes(bytes: number): string {
   )
 }
 
+/**
+ * Get a factor for scaling the font size and the length of the sentinel
+ *
+ * @param bytes
+ * @param maxFactor
+ */
 export function getSizeFactorForBytes(
   bytes: number,
   maxFactor: number = 8
@@ -39,7 +35,13 @@ export function getSizeFactorForBytes(
   return Math.min(maxFactor, Math.max(1, factor))
 }
 
-export function findElementsWithUrl(url: URL, caseSensitive = false) {
+/**
+ * Find all elements in the document that have attribute values containing the given URL.
+ * E.g. as src or href attributes or in style attributes e.g. as a background-image.
+ *
+ * @param url
+ */
+export function findElementsWithUrl(url: URL): Element[] {
   // WHY not *
   // Performance reasons, we only want to search for elements that are likely to have a src or href attribute
   // -> feel free to change this selector to include more elements if needed
@@ -60,19 +62,19 @@ export function findElementsWithUrl(url: URL, caseSensitive = false) {
       frame[src],
       [style]
     `)
-  const matchingElements: any = []
+
+  const matchingElements: Element[] = []
 
   allElements.forEach(element => {
     const searchTerm = url.pathname + url.search + url.hash
-    console.log(searchTerm)
 
     // Get all attributes
     const attributes = element.attributes
 
     for (let i = 0; i < attributes.length; i++) {
       const attr = attributes[i]
-      const value = caseSensitive ? attr.value : attr.value.toLowerCase()
-      const search = caseSensitive ? searchTerm : searchTerm.toLowerCase()
+      const value = attr.value.toLowerCase()
+      const search = searchTerm.toLowerCase()
 
       if (value.includes(search)) {
         matchingElements.push(element)
@@ -82,16 +84,4 @@ export function findElementsWithUrl(url: URL, caseSensitive = false) {
   })
 
   return matchingElements
-}
-
-export function updateInnerTextIfChanged(
-  newText: string,
-  element: Element | undefined | null
-) {
-  if (element && element instanceof HTMLElement) {
-    const current = element.innerText
-    if (current !== newText) {
-      element.innerText = newText
-    }
-  }
 }
