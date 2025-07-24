@@ -26,6 +26,11 @@ function start() {
   npm run dev
 }
 
+function test() {
+  _nvm_use
+  npm run test
+}
+
 function build() {
   _nvm_use
   npm run build

@@ -8,7 +8,7 @@ export type FSOptions = {
   maxBytesPerResourceThreshold: number
   ignoreResourcesBelowBytesThreshold: number
   sentinelZIndex: number
-  resourceFilter: (url: string) => boolean
+  skipResource: (url: string) => boolean
   onInitialFootprint?: (footprint: FSResult) => void
   onFootprintChange?: (footprint: FSChangeResult) => void
 }

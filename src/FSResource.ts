@@ -40,6 +40,9 @@ export default class FSResource {
    * @returns True if the resource size was updated, false if no change was needed
    */
   public updateIfNeeded(resource: PerformanceResourceTiming): boolean {
+    if (resource.name !== this.url) {
+      throw `Resource URL mismatch: expected ${this.url}, got ${resource.name}`
+    }
     const newSize = _sizeFromResource(resource)
     if (this.size !== newSize) {
       this.size = newSize
@@ -102,6 +105,8 @@ export default class FSResource {
       if (this.size > maxBytesAllowed) {
         const hint = document.createElement('div')
         hint.classList.add(FSConsts.cssClass.resourceHint)
+        // we add the resource URL to the hint so we can identify it later in test cases
+        hint.setAttribute(FSConsts.dataAttr.resourceUrl, this.url)
 
         if (rect.height < 200 || rect.width < 200) {
           hint.classList.add(FSConsts.cssClass.resourceHintSmall)
@@ -235,5 +240,9 @@ export default class FSResource {
  * @return The size of the resource in bytes, or 0 if no size is available
  */
 function _sizeFromResource(resource: PerformanceResourceTiming): number {
-  return resource.encodedBodySize || resource.transferSize || 0
+  // transferSize is the size of the resource that was transferred over the network with headers and body.
+  // if 0 the resource was cached so we fall back to encodedBodySize which is the size of the body only.
+  // TODO: it seems like encodedBodySize is always 0 for cached resources. -> investigate further. Seems
+  // like the performance API does not provide a way to get the size of a cached resource.
+  return resource.transferSize || resource.encodedBodySize || 0
 }

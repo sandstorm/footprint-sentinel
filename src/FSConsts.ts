@@ -32,4 +32,8 @@ export default class FSConsts {
   static cssVar = {
     ratingColor: '--footprint-sentinel-rating-color',
   }
+
+  static dataAttr = {
+    resourceUrl: 'data-resource-url',
+  }
 }

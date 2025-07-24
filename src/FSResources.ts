@@ -31,7 +31,7 @@ export default class FSRessources {
   public onResourceUpdated: (resource: FSResource) => void = () => {}
 
   /** Timeout for the next update of the resources */
-  private _updateTimeout: number | null = null
+  private _updateTimeout: ReturnType<typeof setTimeout> | null = null
   /** Current update interval in milliseconds. Is increased to backoff */
   private _currentUpdateInterval: number = _updateIntervalBeforeInitialMs
   /** Timestamp when the document was loaded, used to calculate the initial footprint */
@@ -169,7 +169,7 @@ export default class FSRessources {
         entry instanceof PerformanceResourceTiming &&
         // The filter can be used to filter out resources that should not be tracked
         // e.g. some backend or cms resources
-        this.options.resourceFilter(entry.name)
+        !this.options.skipResource(entry.name)
       ) {
         this.addResource(entry)
       }

@@ -37,5 +37,5 @@ export const defaultOptions: FSOptions = {
 
   // Default filter that allows all resources
   // Can be used to e.g. filter out Neos backend resources
-  resourceFilter: () => true,
+  skipResource: () => false,
 }
