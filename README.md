@@ -31,9 +31,15 @@ application.
 
 ## Installation
 
-TODO
+`npm install footprint-sentinel`
 
-## Options
+## Usage
+
+```ts
+new FootprintSentinel({
+    isActivated: true,
+})
+```
 
 TODO
 
