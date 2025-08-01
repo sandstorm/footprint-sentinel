@@ -35,5 +35,6 @@ export default class FSConsts {
 
   static dataAttr = {
     resourceUrl: 'data-resource-url',
+    hasSentinelHint: 'data-has-sentinel-hint',
   }
 }

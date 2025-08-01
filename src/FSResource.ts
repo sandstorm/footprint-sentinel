@@ -67,146 +67,92 @@ export default class FSResource {
     // if the url was found on a nested source element.
     const parentElement = element.parentElement
 
-    // making ts happy
-    if (parentElement && element instanceof HTMLElement) {
-      // assume the element itself is the target for the hint
-      let hintTarget: HTMLElement = element as HTMLElement
+    if (!parentElement || !(element instanceof HTMLElement)) return
 
-      switch (true) {
-        case parentElement instanceof HTMLPictureElement:
-        case parentElement instanceof HTMLVideoElement:
-          hintTarget = parentElement
-          break
-        default:
-        // Do nothing for other types of elements
+    // assume the element itself is the target for the hint
+    let hintTarget: HTMLElement = element as HTMLElement
+
+    switch (true) {
+      case parentElement instanceof HTMLPictureElement:
+      case parentElement instanceof HTMLVideoElement:
+        hintTarget = parentElement
+        break
+      default:
+      // Do nothing for other types of elements
+    }
+
+    // ######### Checking thresholds #########
+
+    let rect = hintTarget.getBoundingClientRect()
+    const dpr = window.devicePixelRatio || 1
+    const areaInPx = rect.width * rect.height * dpr * dpr
+
+    const maxBytesAllowedForArea =
+      (areaInPx / (100 * 100)) * this.options.maxBytesPer100x100Threshold
+
+    if (maxBytesAllowedForArea <= 0) {
+      return
+    }
+
+    // either the image is too big for the area it occupies or the resource is too big in general
+    const maxBytesAllowed = Math.min(
+      maxBytesAllowedForArea,
+      this.options.maxBytesPerResourceThreshold
+    )
+
+    // ######### Rendering the hint #########
+
+    if (
+      this.size > maxBytesAllowed &&
+      // IMPORTANT: We only render the hint once per element -> otherwise the browser will freeze when trying
+      // to rerender the popper
+      !hintTarget.hasAttribute(FSConsts.dataAttr.hasSentinelHint)
+    ) {
+      hintTarget.setAttribute(FSConsts.dataAttr.hasSentinelHint, 'true')
+      const hint = document.createElement('div')
+      hint.classList.add(FSConsts.cssClass.resourceHint)
+      // we add the resource URL to the hint so we can identify it later in test cases
+      hint.setAttribute(FSConsts.dataAttr.resourceUrl, this.url)
+
+      if (rect.height < 200 || rect.width < 200) {
+        hint.classList.add(FSConsts.cssClass.resourceHintSmall)
       }
 
-      // ######### Checking thresholds #########
-
-      let rect = hintTarget.getBoundingClientRect()
-      const dpr = window.devicePixelRatio || 1
-      const areaInPx = rect.width * rect.height * dpr * dpr
-
-      const maxBytesAllowedForArea =
-        (areaInPx / (100 * 100)) * this.options.maxBytesPer100x100Threshold
-
-      if (maxBytesAllowedForArea <= 0) {
-        return
-      }
-
-      // either the image is too big for the area it occupies or the resource is too big in general
-      const maxBytesAllowed = Math.min(
-        maxBytesAllowedForArea,
-        this.options.maxBytesPerResourceThreshold
-      )
-
-      // ######### Rendering the hint #########
-
-      if (this.size > maxBytesAllowed) {
-        const hint = document.createElement('div')
-        hint.classList.add(FSConsts.cssClass.resourceHint)
-        // we add the resource URL to the hint so we can identify it later in test cases
-        hint.setAttribute(FSConsts.dataAttr.resourceUrl, this.url)
-
-        if (rect.height < 200 || rect.width < 200) {
-          hint.classList.add(FSConsts.cssClass.resourceHintSmall)
-        }
-
-        hint.innerHTML = `
+      hint.innerHTML = `
           <div class="${FSConsts.cssClass.resourceHintContent}">
             <strong style="font-size: 1.2em">${formatBytes(this.size)}</strong>
             <span>max ${formatBytes(maxBytesAllowed)}</span>
           </div>
         `
 
-        hintTarget.insertAdjacentElement('afterend', hint)
+      hintTarget.insertAdjacentElement('afterend', hint)
 
-        // aligning the hint with the popper
-        const samePositionAndSize: Modifier<any, any> = {
-          name: 'samePositionAndSize',
-          enabled: true,
-          phase: 'beforeWrite',
-          requires: ['computeStyles'],
-          fn: ({ state }) => {
-            state.styles.popper.width = `${state.rects.reference.width}px`
-            state.styles.popper.height = `${state.rects.reference.height}px`
+      // aligning the hint with the popper
+      const samePositionAndSize: Modifier<any, any> = {
+        name: 'samePositionAndSize',
+        enabled: true,
+        phase: 'beforeWrite',
+        requires: ['computeStyles'],
+        fn: ({ state }) => {
+          state.styles.popper.width = `${state.rects.reference.width}px`
+          state.styles.popper.height = `${state.rects.reference.height}px`
 
-            state.styles.popper.left = `-${state.rects.reference.width}px`
-            state.styles.popper.zIndex = '1'
-          },
-        }
-
-        // WYH popper.js? -> We tried different approaches to position the hint.
-        //  * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
-        //    in a div or rely on a parent element with the right size so the UI does not look broken.
-        //  * Using a filter with an SVG to display the hint did not work in all browsers
-        //  * Placing an element before or after and then trying to position it with CSS was not reliable enough.
-        //  * Wrapping the element in a div has the chance of breaking the layout
-        //  * CSS anchor properties are not widely supported yet
-        createPopper(hintTarget, hint, {
-          placement: 'right-start',
-          modifiers: [samePositionAndSize],
-        })
-
-        // The following code felt like a good idea. We do not introduce new elements into the DOM (except for the filter).
-        // Sadly it did not work for firefox and safari, so we had to use the popper.js library to position the hint.
-        // TODO LATER: Maybe we can revisit this and use the filter again, but it is not a priority right now.
-        //
-        //   //WHY this much SVG code?: We want to be able to display formatted text to give some context to the user.
-        //   //We do not want to alter the markup. Add visible elements or even worse, wrap elements to be able to display the hint.
-        //   //Using a filter with an SVG allows us to display the hint without altering the DOM. It is CSS only ;)
-        //
-        //   // We need a UUID to link the filter to the element
-        //   const uuid = crypto.randomUUID()
-        //
-        //   hintTarget.style.setProperty(
-        //     FSConsts.cssVar.resourceDirtyFilter,
-        //     `url(#${uuid})`
-        //   )
-        //
-        //   // Smaller text if the element is small -> prevent the ui from looking broken in most cases
-        //   const useSmallText = rect.height < 200 || rect.width < 200
-        //
-        //   // The red rectangular background of the hint
-        //   const svgPanel = _svgDataURI(
-        //     `<rect width="50%" height="50%" x="25%" y="25%" fill='#fd0100' />`
-        //   )
-        //
-        //   // The content of the hint
-        //   const svgPanelContent = _svgDataURI(
-        //     `
-        //       <text x="50%" y="50%" text-anchor="middle" fill="white" font-family="sans-serif">
-        //           <tspan x="50%" dy="-2" font-size="${useSmallText ? 12 : 20}" font-weight="bold">${formatBytes(this.size)}</tspan>
-        //           <tspan x="50%" dy="${useSmallText ? 14 : 20}" font-size="${useSmallText ? 12 : 14}">max ${formatBytes(maxBytesAllowed)}</tspan>
-        //       </text>
-        //   `
-        //   )
-        //
-        //   // inserting the SVG filter into the DOM, using the uuid to link it to the element.
-        //   // display: none to prevent any conflicts with the layout.
-        //   //
-        //   // In the filter we use different layers.
-        //   //  * The first layer SourceGraphic
-        //   //  * The second layer is the red rectangle applied to the first layer
-        //   //  * The third layer is the text content applied to the second layer
-        //   //
-        //   // We played around with different blend modes, but overlay looks best in most cases.
-        //   hintTarget.insertAdjacentHTML(
-        //     'beforebegin',
-        //     `
-        //     <svg style="display: none;">
-        //       <defs>
-        //         <filter id="${uuid}">
-        //           <feImage href="${svgPanel}" result="panel"/>
-        //           <feImage href="${svgPanelContent}" result="panelContent"/>
-        //           <feBlend in="SourceGraphic" in2="panel" mode="overlay" result="layer01"/>
-        //           <feBlend in="layer01" in2="panelContent" mode="overlay" result="layer02"/>
-        //         </filter>
-        //       </defs>
-        //     </svg>
-        // `
-        //   )
+          state.styles.popper.left = `-${state.rects.reference.width}px`
+          state.styles.popper.zIndex = '1'
+        },
       }
+
+      // WYH popper.js? -> We tried different approaches to position the hint.
+      //  * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
+      //    in a div or rely on a parent element with the right size so the UI does not look broken.
+      //  * Using a filter with an SVG to display the hint did not work in all browsers
+      //  * Placing an element before or after and then trying to position it with CSS was not reliable enough.
+      //  * Wrapping the element in a div has the chance of breaking the layout
+      //  * CSS anchor properties are not widely supported yet
+      createPopper(hintTarget, hint, {
+        placement: 'right-start',
+        modifiers: [samePositionAndSize],
+      })
     }
   }
 }
