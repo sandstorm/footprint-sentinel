@@ -1,6 +1,6 @@
 {
   "name": "footprint-sentinel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A tool for developers and editors to measure and visualize the footprint of a web page or web application",
   "type": "module",
   "main": "./dist/index.cjs",
