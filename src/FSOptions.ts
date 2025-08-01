@@ -17,7 +17,7 @@ export const defaultOptions: FSOptions = {
   // Can be used to debug srcset images, e.g. by resizing the browser window, new resources will loaded
   // and flagged if they exceed the threshold
 
-  // For the default value we used claude ai + trial and error to find a good value
+  // For the default value we used trial and error to find a reasonable value
   maxBytesPer100x100Threshold: 10 * 1024,
 
   // Threshold for the maximum size of a single resource

@@ -33,15 +33,67 @@ application.
 
 `npm install footprint-sentinel`
 
+`yarn add footprint-sentinel`
+
 ## Usage
+
+### Give me the defaults
+
+This will give you the full UI (sentinel at the bottom and inline hints for large resources).
+The thresholds for inline hints are set to reasonable defaults.
+
+```ts
+new FootprintSentinel()
+```
+
+All default options can be found [here](src/FSOptions.ts).
+
+### Customize thresholds
 
 ```ts
 new FootprintSentinel({
-    isActivated: true,
+    // Threshold for the maximum size of a single resource
+    // This is a hard limit even if the maxBytesPer100x100Threshold would allow a bigger resources.
+    maxBytesPerResourceThreshold: 200 * 1024,
+    // Threshold used for calculating the maximum size of a resource based on its rendered size.
+    maxBytesPer100x100Threshold: 10 * 1024,
+    // Threshold for the minimum size of a resource to be considered for inline hints.
+    // We want to improve performanc and not clutter the UI hints that have a very small impact.
+    ignoreResourcesBelowBytesThreshold: 40 * 1024,
 })
 ```
 
-TODO
+### Headless mode and tracking
+
+Use callbacks to track the footprint of your application. You might want to use the headless mode to not display the UI, but still track the footprint.
+
+We recommend to use the delta for tracking the footprint over time. This way you do not lose too much information if the user
+navigates to a different page or reloads the page. The delta is the difference between the current footprint and the last footprint.
+
+We will provide more examples for Matomo and Google Analytics in the future.
+
+```ts
+new FootprintSentinel({
+    showSentinel: false,
+    showResourceHints: false,
+    onInitialFootprint: (footprint) => console.log("onInitialFootprint", footprint),
+    onFootprintChange: (footprint) => console.log("onFootprintChange", footprint)
+})
+```
+
+```ts
+// Calbacks are called with the footprint object
+
+const footprint = {
+    total: {
+        bytes: 204800,
+        bytesFormatted: "200 KB",
+        rating: "A+",
+        color: "#00febc"
+    },
+    lastDelta: { bytes: 10240, bytesFormatted: "10 KB"},
+}
+```
 
 ## Motivation
 

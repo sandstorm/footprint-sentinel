@@ -39,8 +39,8 @@ function build() {
 function publish() {
   _nvm_use
   npm run build
-  npm run login
-  npm run publish
+  npm login
+  npm publish
 }
 
 function create-image-variant() {

@@ -10,20 +10,10 @@ export type FSOptions = {
   sentinelZIndex: number
   skipResource: (url: string) => boolean
   onInitialFootprint?: (footprint: FSResult) => void
-  onFootprintChange?: (footprint: FSChangeResult) => void
+  onFootprintChange?: (footprint: FSResult) => void
 }
 
 export type FSResult = {
-  total: {
-    bytes: number
-    bytesFormatted: string
-    rating: string
-    color: string
-  }
-  lastDelta: { bytes: number; bytesFormatted: string }
-}
-
-export type FSChangeResult = {
   total: {
     bytes: number
     bytesFormatted: string
