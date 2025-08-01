@@ -1,4 +1,4 @@
-import type { FSOptions } from './types.ts'
+import type { FSOptions } from './types'
 
 /**
  * Default options for the Footprint Sentinel.

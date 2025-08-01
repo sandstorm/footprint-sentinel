@@ -3,13 +3,13 @@ import {
   findElementsWithUrl,
   formatBytes,
   getSizeFactorForBytes,
-} from './utils.ts'
-import styles from './styles.ts'
-import { defaultOptions } from './FSOptions.ts'
-import type FSResource from './FSResource.ts'
-import FSRessources from './FSResources.ts'
-import { getColorForRating, getRatingForBytes } from './FSRating.ts'
-import FSConsts from './FSConsts.ts'
+} from './utils'
+import styles from './styles'
+import { defaultOptions } from './FSOptions'
+import type FSResource from './FSResource'
+import FSRessources from './FSResources'
+import { getColorForRating, getRatingForBytes } from './FSRating'
+import FSConsts from './FSConsts'
 
 export default class FootprintSentinel extends EventTarget {
   private static instance: FootprintSentinel

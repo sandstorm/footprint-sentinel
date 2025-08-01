@@ -1,4 +1,4 @@
-import type { FSRating } from './types.ts'
+import type { FSRating } from './types'
 
 /**
  * Constants values for Footprint Sentinel

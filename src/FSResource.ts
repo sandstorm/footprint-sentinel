@@ -1,7 +1,7 @@
-import type { FSOptions } from './types.ts'
+import type { FSOptions } from './types'
 import { createPopperLite as createPopper, type Modifier } from '@popperjs/core'
-import FSConsts from './FSConsts.ts'
-import { formatBytes } from './utils.ts'
+import FSConsts from './FSConsts'
+import { formatBytes } from './utils'
 
 /**
  * Data model created from a PerformanceResourceTiming object to tract he overall size of a resource.

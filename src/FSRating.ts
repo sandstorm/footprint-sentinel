@@ -1,5 +1,5 @@
-import type { FSRating } from './types.ts'
-import FSConsts from './FSConsts.ts'
+import FSConsts from './FSConsts'
+import { FSRating } from './types'
 
 /**
  * Get digital carbon rating according to Sustainable Web Design guidelines

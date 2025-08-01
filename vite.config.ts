@@ -30,7 +30,7 @@ export default defineConfig({
       },
     },
     sourcemap: true,
-    minify: 'terser', // Better minification for libraries
+    minify: true,
     target: 'es2020',
   },
 })

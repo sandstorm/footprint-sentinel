@@ -1,4 +1,4 @@
-import FSConsts from './FSConsts.ts'
+import FSConsts from './FSConsts'
 
 const classes = FSConsts.cssClass
 

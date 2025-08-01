@@ -1,6 +1,6 @@
-import type { FSResourcesOptions, FSOptions } from './types.ts'
-import FSResource from './FSResource.ts'
-import { defaultOptions } from './FSOptions.ts'
+import type { FSResourcesOptions, FSOptions } from './types'
+import FSResource from './FSResource'
+import { defaultOptions } from './FSOptions'
 
 const _updateIntervalBeforeInitialMs = 200
 const _waitForInitialMs = 1000

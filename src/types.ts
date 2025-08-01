@@ -1,4 +1,4 @@
-import type FSResource from './FSResource.ts'
+import type FSResource from './FSResource'
 
 export type FSOptions = {
   isActivated: boolean
