@@ -36,6 +36,13 @@ function build() {
   npm run build
 }
 
+function publish() {
+  _nvm_use
+  npm run build
+  npm run login
+  npm run publish
+}
+
 function create-image-variant() {
   pushd ./demo
     # Array of sizes
