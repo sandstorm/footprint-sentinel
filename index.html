@@ -198,6 +198,9 @@
 <script type="module">
     import FootprintSentinel from "./src/index.ts";
 
+    new FootprintSentinel()
+    new FootprintSentinel()
+    new FootprintSentinel()
     // Add event listener to all elements with class 'mode-switch'
     document.querySelectorAll('.mode-switch').forEach((element) => {
         element.addEventListener('click', (e) => {
@@ -214,10 +217,10 @@
     switch (mode) {
         case null:
         case '':
-            new FootprintSentinel()
+            FootprintSentinel.getInstance()
             break;
         case 'easy':
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: true,
                 showResourceHints: true,
@@ -226,7 +229,7 @@
             })
             break;
         case 'hard':
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: true,
                 showResourceHints: true,
@@ -235,11 +238,11 @@
             })
             break;
         case 'headless':
-            const customUI = document.createElement("div")
+            const customUI = document.createElement("div");
             customUI.classList.add("custom-ui");
             document.body.append(customUI)
 
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: false,
                 showResourceHints: false,
