@@ -7,7 +7,7 @@ import {
 import styles from './styles'
 import { defaultOptions } from './FSOptions'
 import type FSResource from './FSResource'
-import FSRessources from './FSResources'
+import FSResources from './FSResources'
 import { getColorForRating, getRatingForBytes } from './FSRating'
 import FSConsts from './FSConsts'
 
@@ -15,7 +15,7 @@ export default class FootprintSentinel extends EventTarget {
   private static instance: FootprintSentinel
   private footprintElement: HTMLDivElement | null = null
   private options: FSOptions = defaultOptions
-  private resources: FSRessources = FSRessources.later()
+  private resources: FSResources = FSResources.later()
   private lastTotalBytes = 0
   private lastTotalBytesDebounceTimeout: number | null = null
 
@@ -31,7 +31,7 @@ export default class FootprintSentinel extends EventTarget {
     }
 
     if (this.options.isActivated) {
-      this.resources = new FSRessources({
+      this.resources = new FSResources({
         options: this.options,
         onResourceUpdated: this.handleResourceUpdated.bind(this),
         onInitialFootprint: this._handleInitialFootprint.bind(this),

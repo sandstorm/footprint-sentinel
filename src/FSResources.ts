@@ -10,7 +10,7 @@ const _updateIntervalAfterInitialMs = 2000
  * Class to manage and track resources on the page, based on PerformanceResourceTiming.
  * It collects resource data, updates it, and provides methods to access the total size of resources.
  */
-export default class FSRessources {
+export default class FSResources {
   /** A map of resources indexed by their URL */
   public resources: { [url: string]: FSResource } = {}
   /** Options for the Footprint Sentinel */
@@ -41,8 +41,8 @@ export default class FSRessources {
    * Factory method to create a new instance of FSRessources with default options.
    * This is useful for lazy initialization or when you want to create the instance later.
    */
-  public static later(): FSRessources {
-    return new FSRessources({
+  public static later(): FSResources {
+    return new FSResources({
       options: defaultOptions,
       onResourceUpdated: () => null,
       onInitialFootprint: () => null,
@@ -86,7 +86,7 @@ export default class FSRessources {
    * @param resource
    * @returns The current instance of FSRessources for chaining
    */
-  public addResource(resource: PerformanceResourceTiming): FSRessources {
+  public addResource(resource: PerformanceResourceTiming): FSResources {
     if (this.resources[resource.name]) {
       const updated = this.resources[resource.name].updateIfNeeded(resource)
       if (updated) {
@@ -159,7 +159,7 @@ export default class FSRessources {
    *
    * @returns The current instance of FSRessources for chaining
    */
-  private _updateWithCurrentPerformanceEntries(): FSRessources {
+  private _updateWithCurrentPerformanceEntries(): FSResources {
     const entries = [
       ...performance.getEntriesByType('resource'),
       performance.getEntriesByType('navigation')[0],
