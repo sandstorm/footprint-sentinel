@@ -38,7 +38,7 @@ export default class FSResources {
   private _documentLoadedTimestampMs: number | null = null
 
   /**
-   * Factory method to create a new instance of FSRessources with default options.
+   * Factory method to create a new instance of FSResources with default options.
    * This is useful for lazy initialization or when you want to create the instance later.
    */
   public static later(): FSResources {
@@ -84,7 +84,7 @@ export default class FSResources {
    * it checks if the size has changed and updates it if necessary. A rerender of the resource hint is triggered
    *
    * @param resource
-   * @returns The current instance of FSRessources for chaining
+   * @returns The current instance of FSResources for chaining
    */
   public addResource(resource: PerformanceResourceTiming): FSResources {
     if (this.resources[resource.name]) {
@@ -157,7 +157,7 @@ export default class FSResources {
    * ensure that we have the latest resource data. It collects all resource entries from the
    * Performance API and adds them to the resources map if they pass the filter.
    *
-   * @returns The current instance of FSRessources for chaining
+   * @returns The current instance of FSResources for chaining
    */
   private _updateWithCurrentPerformanceEntries(): FSResources {
     const entries = [

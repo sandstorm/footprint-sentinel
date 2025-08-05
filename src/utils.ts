@@ -82,7 +82,7 @@ export function findElementsWithUrl(url: URL): Element[] {
 
       if (value.includes(search)) {
         matchingElements.push(element)
-        break // Don't add same element multiple times
+        break // Don't add the same element multiple times
       }
     }
   })
