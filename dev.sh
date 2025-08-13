@@ -22,21 +22,25 @@ function setup() {
 }
 
 function start() {
+  _log_green "Starting Demo"
   _nvm_use
   npm run dev
 }
 
 function test() {
+  _log_green "Running tests"
   _nvm_use
   npm run test
 }
 
 function build() {
+  _log_green "Building package"
   _nvm_use
   npm run build
 }
 
 function publish() {
+  _log_green "Publishing package"
   _nvm_use
   npm run build
   npm login

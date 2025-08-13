@@ -4,7 +4,7 @@ import type { FSRating } from './types'
  * Constants values for Footprint Sentinel
  */
 export default class FSConsts {
-  static cssClass = {
+  static readonly cssClass = {
     resourceHint: 'footprint-sentinel-hint',
     resourceHintSmall: 'footprint-sentinel-hint--small',
     resourceHintContent: 'footprint-sentinel-hint__content',
@@ -19,7 +19,7 @@ export default class FSConsts {
     sentinelLabel: 'footprint-sentinel__label',
   }
 
-  static ratingColors: Record<FSRating, string> = {
+  static readonly ratingColors: Record<FSRating, string> = {
     'A+': '#00febc',
     A: '#1aff93',
     B: '#49ff42',
@@ -29,11 +29,11 @@ export default class FSConsts {
     F: '#fd0100',
   }
 
-  static cssVar = {
+  static readonly cssVar = {
     ratingColor: '--footprint-sentinel-rating-color',
   }
 
-  static dataAttr = {
+  static readonly dataAttr = {
     resourceUrl: 'data-resource-url',
     hasSentinelHint: 'data-has-sentinel-hint',
   }

@@ -76,14 +76,13 @@ export function findElementsWithUrl(url: URL): Element[] {
     // Get all attributes
     const attributes = element.attributes
 
-    for (let i = 0; i < attributes.length; i++) {
-      const attr = attributes[i]
+    for (const attr of attributes) {
       const value = attr.value.toLowerCase()
       const search = searchTerm.toLowerCase()
 
       if (value.includes(search)) {
         matchingElements.push(element)
-        break // Don't add same element multiple times
+        break // Don't add the same element multiple times
       }
     }
   })

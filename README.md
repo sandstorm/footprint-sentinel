@@ -43,7 +43,7 @@ This will give you the full UI (sentinel at the bottom and inline hints for larg
 The thresholds for inline hints are set to reasonable defaults.
 
 ```ts
-new FootprintSentinel()
+FootprintSentinel.getInstance()
 ```
 
 All default options can be found [here](src/FSOptions.ts).
@@ -51,7 +51,7 @@ All default options can be found [here](src/FSOptions.ts).
 ### Customize thresholds
 
 ```ts
-new FootprintSentinel({
+FootprintSentinel.getInstance()({
     // Threshold for the maximum size of a single resource
     // This is a hard limit even if the maxBytesPer100x100Threshold would allow a bigger resources.
     maxBytesPerResourceThreshold: 200 * 1024,
@@ -73,7 +73,7 @@ navigates to a different page or reloads the page. The delta is the difference b
 We will provide more examples for Matomo and Google Analytics in the future.
 
 ```ts
-new FootprintSentinel({
+FootprintSentinel.getInstance()({
     showSentinel: false,
     showResourceHints: false,
     onInitialFootprint: (footprint) => console.log("onInitialFootprint", footprint),

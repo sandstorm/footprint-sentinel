@@ -5,8 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="./demo/main.css">
     <title>Footprint Sentinel Demo</title>
+    <style>
+        /* Light/Dark Mode Toggle CSS */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle input[type="checkbox"] {
+            display: none;
+        }
+
+        .theme-toggle label {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            background: #ccc;
+            border-radius: 30px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle label::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle input:checked + label {
+            background: #333;
+        }
+
+        .theme-toggle input:checked + label::after {
+            transform: translateX(30px);
+        }
+
+        /* Light Mode (default) */
+        :root {
+            color-scheme: light;
+            --bg-color: light-dark(#ffffff, #000000);
+            --text-color: light-dark(#333333,#FBFAFA);
+            --header-bg: light-dark(#f8f9fa, #000000);
+            --border-color: light-dark(#dee2e6,#000000);
+        }
+
+        :root:has(input#theme-switch:checked){
+            color-scheme: dark;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .header, .footer {
+            background-color: var(--header-bg);
+            transition: background-color 0.3s;
+        }
+
+        .container {
+            background-color: var(--bg-color);
+            transition: background-color 0.3s;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-color);
+        }
+
+        .button {
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background-color: var(--border-color);
+        }
+    </style>
 </head>
 <body>
+<div class="theme-toggle">
+    <input type="checkbox" id="theme-switch">
+    <label for="theme-switch"></label>
+</div>
+<div class="page-wrapper">
 <header class="header"></header>
 <div class="container" style="height: 200vh">
     <h1>Footprint Sentinel Demo</h1>
@@ -100,6 +193,7 @@
 </div>
 
 <footer class="footer"></footer>
+</div>
 
 <script type="module">
     import FootprintSentinel from "./src/index.ts";
@@ -120,10 +214,10 @@
     switch (mode) {
         case null:
         case '':
-            new FootprintSentinel()
+            FootprintSentinel.getInstance()
             break;
         case 'easy':
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: true,
                 showResourceHints: true,
@@ -132,7 +226,7 @@
             })
             break;
         case 'hard':
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: true,
                 showResourceHints: true,
@@ -141,11 +235,11 @@
             })
             break;
         case 'headless':
-            const customUI = document.createElement("div")
+            const customUI = document.createElement("div");
             customUI.classList.add("custom-ui");
             document.body.append(customUI)
 
-            new FootprintSentinel({
+            FootprintSentinel.getInstance({
                 isActivated: true,
                 showSentinel: false,
                 showResourceHints: false,

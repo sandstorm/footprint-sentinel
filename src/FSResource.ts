@@ -159,7 +159,7 @@ export default class FSResource {
 
 /**
  * Creates a data URI for an SVG image with the given content. The content is wrapped in a basic SVG structure
- * to ensure it is valid. Using a data URI seem to be way that hast the best browser support for filters. Using
+ * to ensure it is valid. Using a data URI seem to be the way that has the best browser support for filters. Using
  * svg directly in the filter did not work in the prototype.
  *
  * // TODO LATER: Maybe we can revisit this and use the filter again, but it is not a priority right now.
