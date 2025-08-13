@@ -7,23 +7,23 @@ import {
 import styles from './styles'
 import { defaultOptions } from './FSOptions'
 import type FSResource from './FSResource'
-import FSRessources from './FSResources'
+import FSResources from './FSResources'
 import { getColorForRating, getRatingForBytes } from './FSRating'
 import FSConsts from './FSConsts'
 
 export default class FootprintSentinel extends EventTarget {
   private static instance: FootprintSentinel
-  private footprintElement: HTMLDivElement | null = null
-  private options: FSOptions = defaultOptions
-  private resources: FSRessources = FSRessources.later()
+  private readonly footprintElement: HTMLDivElement | null = null
+  private readonly options: FSOptions = defaultOptions
+  private readonly resources: FSResources = FSResources.later()
   private lastTotalBytes = 0
   private lastTotalBytesDebounceTimeout: number | null = null
 
-  constructor(options?: Partial<FSOptions>) {
+  private constructor(options?: Partial<FSOptions>) {
     super()
     if (FootprintSentinel.instance) {
       // ensure singleton instance
-      return FootprintSentinel.instance
+      return;
     }
     this.options = {
       ...defaultOptions,
@@ -31,7 +31,7 @@ export default class FootprintSentinel extends EventTarget {
     }
 
     if (this.options.isActivated) {
-      this.resources = new FSRessources({
+      this.resources = new FSResources({
         options: this.options,
         onResourceUpdated: this.handleResourceUpdated.bind(this),
         onInitialFootprint: this._handleInitialFootprint.bind(this),
@@ -203,5 +203,12 @@ export default class FootprintSentinel extends EventTarget {
     document.body.appendChild(element)
 
     return element
+  }
+
+  public static getInstance(options?: Partial<FSOptions>): FootprintSentinel {
+    if (!FootprintSentinel.instance) {
+      FootprintSentinel.instance = new FootprintSentinel(options)
+    }
+    return FootprintSentinel.instance
   }
 }
