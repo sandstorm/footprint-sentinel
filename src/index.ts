@@ -19,11 +19,11 @@ export default class FootprintSentinel extends EventTarget {
   private lastTotalBytes = 0
   private lastTotalBytesDebounceTimeout: number | null = null
 
-  private constructor(options?: Partial<FSOptions>) {
+  constructor(options?: Partial<FSOptions>) {
     super()
     if (FootprintSentinel.instance) {
       // ensure singleton instance
-      return;
+      return
     }
     this.options = {
       ...defaultOptions,
