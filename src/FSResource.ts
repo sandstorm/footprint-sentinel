@@ -74,7 +74,15 @@ export default class FSResource {
 
     switch (true) {
       case parentElement instanceof HTMLPictureElement:
+        // WHY: the <picture> element is defines as inline on default, meaning it will have no size.
+        // For the hint to correctly be aligned we need a block element with a size. The picture
+        // element always needs an img child element, so we can use that as the hint target.
+        hintTarget = parentElement
+          .getElementsByTagName('img')
+          .item(0) as HTMLElement
+        break
       case parentElement instanceof HTMLVideoElement:
+        // Currently no support for the video file itself, only for the poster image.
         hintTarget = parentElement
         break
       default:

@@ -70,6 +70,15 @@ const styles = `
             font-size: 14px;
             line-height: 1.2;
         }
+        .${classes.sentinelNumberOfResourceHints} {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background: #fd0100;
+            font-weight: bold;
+            color: white;
+        }
     </style>
 `
 export default styles

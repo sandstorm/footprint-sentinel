@@ -104,7 +104,9 @@ TODO
 
 * provide more hints e.g. if resource is a gif: "Use webp animation instead, ...", "Do not use autoload="metadata", ...
 * provide knowledge base
-* cach bust mode so reload without cache is not need
+* cache bust mode so reload without cache is not need
 	* if transfered size is 0 fetch resource with cachebust -> should never be activated on production site
-* more evolved algorithm to decide if resource size is to big for rendered size
+    * maybe not a good idea because it would distort the footprint
+    * maybe not a good idea if accidentally activated on production site
+* more evolved algorithm to decide if resource size is too big for rendered size
 * add hints for hidden resources -> css, js, ...

@@ -17,6 +17,8 @@ export default class FSConsts {
     sentinelRating: 'footprint-sentinel__rating',
     sentinelSize: 'footprint-sentinel__size',
     sentinelLabel: 'footprint-sentinel__label',
+    sentinelNumberOfResourceHints:
+      'footprint-sentinel__number-of-resource-hints',
   }
 
   static readonly ratingColors: Record<FSRating, string> = {

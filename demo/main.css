@@ -94,19 +94,9 @@ h3 {
     border-radius: 8px;
 }
 
-picture {
-    display: block;
-    position: relative;
-}
-
 img {
-    display: block;
-    position: relative;
     transition-property: all;
     transition-duration: 300ms;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    height: auto;
     border-radius: 14px;
+    max-width: 100%;
 }
