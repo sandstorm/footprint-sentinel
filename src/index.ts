@@ -114,8 +114,8 @@ export default class FootprintSentinel extends EventTarget {
       }, 500)
     }
 
-    this._updateFootprint()
     this._updateResourceHint(resource)
+    this._updateFootprint()
   }
 
   /**
@@ -134,6 +134,12 @@ export default class FootprintSentinel extends EventTarget {
   private _updateFootprint() {
     if (!this.options?.showSentinel || !this.footprintElement) return
 
+    const numberOfResourceHints: number = this.options.showResourceHints
+      ? document.querySelectorAll(
+          `[${FSConsts.dataAttr.hasSentinelHint}="true"]`
+        ).length
+      : 0
+
     const totalBytes = this.resources.totalBytes()
     const initialBytes = this.resources.initialBytes || 0
 
@@ -151,8 +157,15 @@ export default class FootprintSentinel extends EventTarget {
     const initialStyle = `width: ${100 + 40 * initialFactor}px; font-size: ${0.85 + 0.05 * initialFactor}em; ${FSConsts.cssVar.ratingColor}: ${getColorForRating(initialRating)};`
     const initialLabel = 'Initial'
 
-    this.footprintElement.innerHTML = `
+    const numberOfResourceHintsHtml =
+      numberOfResourceHints > 0
+        ? `
+      <div class="${FSConsts.cssClass.sentinelNumberOfResourceHints}">${numberOfResourceHints}</div>
+    `
+        : ''
 
+    this.footprintElement.innerHTML = `
+        ${numberOfResourceHintsHtml}
         <div class="${FSConsts.cssClass.sentinelStats}" data-rating="${totalBytesRating}" style="${totalBytesStyle}">
             <div class="${FSConsts.cssClass.sentinelRow}">
                 <span class="${FSConsts.cssClass.sentinelRating}">${totalBytesRating}</span>
