@@ -6,10 +6,10 @@ import type { FSRating } from './types'
 export default class FSConsts {
   static readonly cssClass = {
     resourceHint: 'footprint-sentinel-hint',
-    resourceHintSmall: 'footprint-sentinel-hint--small',
+    resourceHintOpen: 'footprint-sentinel-hint--open',
+    resourceHintIcon: 'footprint-sentinel-hint__icon',
+    resourceHintIconMark: 'footprint-sentinel-hint__icon-mark',
     resourceHintContent: 'footprint-sentinel-hint__content',
-    resourceHintText: 'footprint-sentinel-hint__text',
-    resourceHintTextBig: 'footprint-sentinel-hint__text--big',
     sentinel: 'footprint-sentinel',
     sentinelStats: 'footprint-sentinel__stats',
     sentinelStatsHide: 'footprint-sentinel__stats--hide',
