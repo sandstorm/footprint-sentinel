@@ -9,27 +9,75 @@ const styles = `
         }   
         .${classes.resourceHint} {
            box-sizing: border-box;
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           font-size: 14px;
+           position: relative;
            pointer-events: none;
         }
-        
-        .${classes.resourceHintSmall}{
-           font-size: 10px;
+
+        .${classes.resourceHintIcon} {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background: #fd0100;
+            color: white;
+            font-weight: bold;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            border: none;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            padding: 0;
+            overflow: hidden;
+            transition: width 150ms ease, height 150ms ease, background-color 150ms ease, color 150ms ease;
         }
-        
-        .${classes.resourceHintContent} {
-            padding: 5px;
-            width: 50%;
-            height: 50%;
+
+        .${classes.resourceHintIcon} .${classes.resourceHintContent} {
+            display: none;
+        }
+
+        .${classes.resourceHintIconMark} {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+        }
+
+        .${classes.resourceHintIconMark} svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .${classes.resourceHintOpen} .${classes.resourceHintIcon} {
+            width: auto;
+            height: auto;
+            min-width: 24px;
+            min-height: 24px;
+            padding: 6px 10px;
+            background: white;
+            color: black;
+        }
+
+        .${classes.resourceHintOpen} .${classes.resourceHintIcon} .${classes.resourceHintIconMark} {
+            display: none;
+        }
+
+        .${classes.resourceHintOpen} .${classes.resourceHintIcon} .${classes.resourceHintContent} {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #fd0100;
-            color: white;
+            font-size: 12px;
+            line-height: 1.3;
+            white-space: nowrap;
         }
         
         .${classes.sentinel} {
