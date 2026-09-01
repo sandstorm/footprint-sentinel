@@ -11,14 +11,22 @@ export default class FSConsts {
     resourceHintIconMark: 'footprint-sentinel-hint__icon-mark',
     resourceHintContent: 'footprint-sentinel-hint__content',
     sentinel: 'footprint-sentinel',
-    sentinelStats: 'footprint-sentinel__stats',
-    sentinelStatsHide: 'footprint-sentinel__stats--hide',
-    sentinelRow: 'footprint-sentinel__row',
-    sentinelRating: 'footprint-sentinel__rating',
-    sentinelSize: 'footprint-sentinel__size',
-    sentinelLabel: 'footprint-sentinel__label',
+    sentinelButtonDot: 'footprint-sentinel__button-dot',
+    sentinelButtonLabel: 'footprint-sentinel__button-label',
     sentinelNumberOfResourceHints:
       'footprint-sentinel__number-of-resource-hints',
+    modalOverlay: 'footprint-sentinel__modal-overlay',
+    modal: 'footprint-sentinel__modal',
+    modalClose: 'footprint-sentinel__modal-close',
+    modalBody: 'footprint-sentinel__modal-body',
+    modalTitle: 'footprint-sentinel__modal-title',
+    modalSubtitle: 'footprint-sentinel__modal-subtitle',
+    modalSummary: 'footprint-sentinel__modal-summary',
+    modalRatingBadge: 'footprint-sentinel__modal-rating-badge',
+    modalTable: 'footprint-sentinel__modal-table',
+    modalTableRowClickable: 'footprint-sentinel__modal-table-row--clickable',
+    modalEmpty: 'footprint-sentinel__modal-empty',
+    highlight: 'footprint-sentinel__highlight',
   }
 
   static readonly ratingColors: Record<FSRating, string> = {
@@ -38,5 +46,7 @@ export default class FSConsts {
   static readonly dataAttr = {
     resourceUrl: 'data-resource-url',
     hasSentinelHint: 'data-has-sentinel-hint',
+    sizeBytes: 'data-size-bytes',
+    maxBytesAllowed: 'data-max-bytes-allowed',
   }
 }

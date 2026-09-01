@@ -40,6 +40,20 @@ export function getSizeFactorForBytes(
 }
 
 /**
+ * Shortens a resource URL down to its file name, for compact display in a table.
+ *
+ * @param url
+ */
+export function shortenUrl(url: string): string {
+  try {
+    const { pathname } = new URL(url)
+    return pathname.split('/').pop() || url
+  } catch {
+    return url
+  }
+}
+
+/**
  * Find all elements in the document that have attribute values containing the given URL.
  * E.g. as src or href attributes or in style attributes e.g. as a background-image.
  *
