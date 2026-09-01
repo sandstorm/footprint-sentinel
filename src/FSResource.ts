@@ -1,7 +1,8 @@
 import type { FSOptions } from './types'
-import { createPopperLite as createPopper, type Modifier } from '@popperjs/core'
+import { createPopperLite as createPopper } from '@popperjs/core'
 import FSConsts from './FSConsts'
 import { formatBytes } from './utils'
+import { samePositionAndSizeModifier } from './FSPopperModifiers'
 
 /**
  * Data model created from a PerformanceResourceTiming object to tract he overall size of a resource.
@@ -121,6 +122,12 @@ export default class FSResource {
       hint.classList.add(FSConsts.cssClass.resourceHint)
       // we add the resource URL to the hint so we can identify it later in test cases
       hint.setAttribute(FSConsts.dataAttr.resourceUrl, this.url)
+      // stored so the sentinel modal can list oversized resources without recomputing the area-based threshold
+      hint.setAttribute(FSConsts.dataAttr.sizeBytes, String(this.size))
+      hint.setAttribute(
+        FSConsts.dataAttr.maxBytesAllowed,
+        String(maxBytesAllowed)
+      )
 
       hint.innerHTML = `
           <button type="button" class="${FSConsts.cssClass.resourceHintIcon}" aria-label="Resource size warning" aria-expanded="false">
@@ -152,21 +159,6 @@ export default class FSResource {
         }
       })
 
-      // aligning the hint with the popper
-      const samePositionAndSize: Modifier<any, any> = {
-        name: 'samePositionAndSize',
-        enabled: true,
-        phase: 'beforeWrite',
-        requires: ['computeStyles'],
-        fn: ({ state }) => {
-          state.styles.popper.width = `${state.rects.reference.width}px`
-          state.styles.popper.height = `${state.rects.reference.height}px`
-
-          state.styles.popper.left = `-${state.rects.reference.width}px`
-          state.styles.popper.zIndex = '1'
-        },
-      }
-
       // WYH popper.js? -> We tried different approaches to position the hint.
       //  * CSS :after pseudo-element cannot be used on <img> tags,  meaning we would need to wrap the element
       //    in a div or rely on a parent element with the right size so the UI does not look broken.
@@ -176,7 +168,7 @@ export default class FSResource {
       //  * CSS anchor properties are not widely supported yet
       createPopper(hintTarget, hint, {
         placement: 'right-start',
-        modifiers: [samePositionAndSize],
+        modifiers: [samePositionAndSizeModifier],
       })
     }
   }
