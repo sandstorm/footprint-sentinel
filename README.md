@@ -101,11 +101,15 @@ Publishing to npm happens automatically via GitHub Actions using [npm trusted pu
 
 To release a new version:
 
-1. Bump `version` in `package.json` and commit the change.
+1. Make your changes, commit them. Then bump `version` in `package.json`.
+    ```sh
+    npm version patch   # 1.3.0 -> 1.3.1
+    npm version minor    # 1.3.0 -> 1.4.0
+    npm version major   # 1.3.0 -> 2.0.0
+    ```
 2. Tag the commit and push the tag, e.g.:
    ```sh
-   git tag v1.4.0
-   git push --tags
+   git push && git push --tags
    ```
 3. The `Publish to npm` workflow (`.github/workflows/publish.yml`) runs tests, builds, and publishes the package automatically.
 
