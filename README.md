@@ -95,6 +95,20 @@ const footprint = {
 }
 ```
 
+## Releasing
+
+Publishing to npm happens automatically via GitHub Actions using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC) — no npm account, 2FA, or local `npm publish` needed.
+
+To release a new version:
+
+1. Bump `version` in `package.json` and commit the change.
+2. Tag the commit and push the tag, e.g.:
+   ```sh
+   git tag v1.4.0
+   git push --tags
+   ```
+3. The `Publish to npm` workflow (`.github/workflows/publish.yml`) runs tests, builds, and publishes the package automatically.
+
 ## Motivation
 
 TODO
